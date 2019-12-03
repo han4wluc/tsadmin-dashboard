@@ -1,0 +1,24 @@
+{
+  "name": "next-ts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.14",
+    "@types/react": "^16.9.14",
+    "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "@babel/plugin-proposal-decorators": "^7.7.4",
+    "mobx": "^5.15.0",
+    "mobx-react": "^6.1.4",
+    "next": "^9.1.4",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  }
+}
