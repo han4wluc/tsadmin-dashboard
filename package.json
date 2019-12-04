@@ -4,11 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "next",
-    "build": "next build",
-    "start": "next start",
+    "dev": "next ./src",
+    "build": "next build ./src",
+    "start": "next start ./src",
     "test": "TS_NODE_PROJECT=tsconfig.mocha.json mocha -r ts-node/register tests/**/*.spec.ts",
-    "test:watch": "TS_NODE_PROJECT=tsconfig.mocha.json mocha -r ts-node/register tests/**/*.spec.ts --watch --ignore node_modules --extension ts,tsx"
+    "test:watch": "TS_NODE_PROJECT=tsconfig.mocha.json mocha -r ts-node/register tests/**/*.spec.ts --watch --ignore node_modules --extension ts,tsx --recursive"
   },
   "devDependencies": {
     "@types/chai": "^4.2.6",

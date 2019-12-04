@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import { action, observable } from 'mobx'
 
 class TodoStore {
-    instance = null
+    static instance: any
 
     static getInstance() {
         if (this.instance) {
@@ -22,10 +22,10 @@ class TodoStore {
     @action decrement = () => {
         this.count -= 1
     }
- }
-  
+}
 
-function Todo(props) {
+
+function Todo() {
     const todoStore = useMemo(() => {
         return new TodoStore()
     }, [0])

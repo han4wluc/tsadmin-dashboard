@@ -2,7 +2,7 @@
 import { assert } from 'chai'
 import 'mocha';
 
-describe('extractFilter', () => {
+describe('test', () => {
     it('should extract single condition', () => {
         assert.deepEqual(1, 1)
     })
