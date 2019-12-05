@@ -1,13 +1,27 @@
+import React, {useEffect, useState} from 'react'
 import { observer } from 'mobx-react'
 
-const connect = ({
+
+interface IConnectPramaters<T> {
+    isGlobal: boolean,
+    Store: any,
+    dependencies: T
+}
+
+function connect<T>({
     isGlobal,
-    Store
-}: any) => {
+    Store,
+    dependencies
+}: IConnectPramaters<T>) {
     return (Element: any) => {
-        const OElement: any = observer(Element)
         return (props: any) => {
-            const store = isGlobal ? Store.getInstance() : new Store()
+            const OElement: any = observer(Element)
+            const [store] = useState(isGlobal ? Store.getInstance(dependencies) : new Store(dependencies))
+            useEffect(() => {
+                return () => {
+                    store.unmount()
+                }
+            }, [store])
             return (
                 <OElement {...props} store={store} />
             )
@@ -15,6 +29,27 @@ const connect = ({
     }
 }
 
+
+export interface IStoreDependencies {}
+
+class BaseStore {
+    static instance: BaseStore
+
+    constructor(
+        protected dependencies: IStoreDependencies
+      ) {}
+
+    static getInstance(dependencies: IStoreDependencies) {
+      if (!this.instance) {
+        this.instance = new BaseStore(dependencies)
+      }
+      return this.instance
+    }
+  
+    unmount() {}
+}
+
 export {
-    connect
+    connect,
+    BaseStore
 }

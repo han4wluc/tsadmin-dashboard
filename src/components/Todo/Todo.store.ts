@@ -1,25 +1,28 @@
 
 import { action, observable } from 'mobx'
+import {BaseStore, IStoreDependencies} from '../../utils/mobxConnect'
 
-export class TodoStore {
+export interface ITodoDependencies extends IStoreDependencies {
+  syncCount: () => void
+}
 
-  static instance: any
-
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new TodoStore()
-    }
-    return this.instance
+export class TodoStore extends BaseStore {
+  constructor(
+    protected dependencies: ITodoDependencies
+  ) {
+    super(dependencies)
   }
 
   @observable count = 0
 
   @action increment = () => {
       this.count += 1
+      this.dependencies.syncCount()
   }
 
   @action decrement = () => {
       this.count -= 1
+      this.dependencies.syncCount()
   }
 
 }

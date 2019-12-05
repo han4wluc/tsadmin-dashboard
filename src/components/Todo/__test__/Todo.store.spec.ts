@@ -9,7 +9,9 @@ describe('Todo.store', () => {
     let todoStore: TodoStore
 
     beforeEach(() => {
-        todoStore = new TodoStore()
+        todoStore = new TodoStore({
+            syncCount: () => {}
+        })
     })
 
     it('should have property count', () => {
