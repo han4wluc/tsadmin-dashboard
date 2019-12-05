@@ -12,8 +12,6 @@ export class TodoStore {
     return this.instance
   }
 
-  static keys = ['count', 'increment', 'decrement']
-
   @observable count = 0
 
   @action increment = () => {

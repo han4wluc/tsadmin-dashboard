@@ -2,14 +2,19 @@
 import React from 'react'
 
 function Todo(props: any) {
-    const { store } = props
-    const { count, increment, decrement } = store
+    const {
+        store: {
+            count,
+            increment,
+            decrement
+        }
+    } = props
     return (
         <div>
-            <span>{count}</span>
-            <button onClick={increment}>increment</button>
-            <button onClick={decrement}>decrement</button>
-            <style jsx>{`
+            <span className="count">{count}</span>
+            <button className="increment" onClick={increment}>increment</button>
+            <button className="decrement" onClick={decrement}>decrement</button>
+            {/* <style jsx>{`
                 div {
                 padding: 15px;
                 color: #82fa58;
@@ -21,7 +26,7 @@ function Todo(props: any) {
                 .light {
                 background-color: #999;
                 }
-            `}</style>
+            `}</style> */}
         </div>
     )
 }
