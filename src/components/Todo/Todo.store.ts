@@ -1,9 +1,11 @@
 
 import { action, observable } from 'mobx'
 import {BaseStore, IStoreDependencies} from '../../utils/mobxConnect'
+import CounterService from '../../services/api/CounterService'
 
 export interface ITodoDependencies extends IStoreDependencies {
   syncCount: () => void
+  counterService: CounterService
 }
 
 export class TodoStore extends BaseStore {
