@@ -14,19 +14,19 @@ function Todo(props: any) {
             <span className="count">{count}</span>
             <button className="increment" onClick={increment}>increment</button>
             <button className="decrement" onClick={decrement}>decrement</button>
-            {/* <style jsx>{`
+            <style jsx>{`
                 div {
-                padding: 15px;
-                color: #82fa58;
-                display: inline-block;
-                font: 50px menlo, monaco, monospace;
-                background-color: #000;
+                    padding: 15px;
+                    color: #82fa58;
+                    display: inline-block;
+                    font: 50px menlo, monaco, monospace;
+                    background-color: #000;
                 }
 
                 .light {
-                background-color: #999;
+                    background-color: #999;
                 }
-            `}</style> */}
+            `}</style>
         </div>
     )
 }
