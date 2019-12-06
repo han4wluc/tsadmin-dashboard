@@ -1,14 +1,17 @@
+
+
 import { connect } from '../../utils/mobxConnect'
-import { TodoStore, ITodoDependencies } from './Todo.store'
-import Todo from './Todo.view'
+import { EntityTableStore, IEntityTableDependencies } from './EntityTable.store'
+import EntityTable from './EntityTable.container'
 import {counterService} from '../../services/api/CounterService'
 
 
-export default connect<ITodoDependencies>({
+export default connect<IEntityTableDependencies>({
     isGlobal: false,
-    Store: TodoStore,
+    Store: EntityTableStore,
     dependencies: {
         syncCount: () => {},
         counterService: counterService
     }
-})(Todo)
+})(EntityTable)
+

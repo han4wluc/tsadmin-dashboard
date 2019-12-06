@@ -1,6 +1,11 @@
 import React from 'react'
 import Todo from '../components/Todo'
 import Clock from '../components/Clock'
+import TableList from '../components/TableList'
+import DataTable from '../components/DataTable'
+
+import EntityTable from '../containers/EntityTable'
+
 
 import { useStaticRendering } from 'mobx-react'
 
@@ -27,9 +32,15 @@ export default class Counter extends React.Component<any, any> {
   render() {
     return (
         <div>
-            <Todo ></Todo>
+            {/* <Todo ></Todo>
             <Clock />
-            { this.state.show && <Todo></Todo> }
+            { this.state.show && <Todo></Todo> } */}
+            {/* <TableList /> */}
+
+            {/* <br /> */}
+
+            {/* <DataTable /> */}
+            <EntityTable />
         </div>
     )
   }

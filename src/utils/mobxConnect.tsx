@@ -18,6 +18,7 @@ function connect<T>({
             const OElement: any = observer(Element)
             const [store] = useState(isGlobal ? Store.getInstance(dependencies) : new Store(dependencies))
             useEffect(() => {
+                store.mount()
                 return () => {
                     store.unmount()
                 }
@@ -45,6 +46,8 @@ class BaseStore {
       }
       return this.instance
     }
+
+    mount() {}
   
     unmount() {}
 }
