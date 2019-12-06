@@ -29,15 +29,16 @@
     "typescript": "^3.7.2"
   },
   "dependencies": {
+    "@types/antd": "^1.0.0",
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-less": "^1.0.1",
     "antd": "^3.26.0",
-    "flexbox-react": "^4.4.0",
     "less": "^3.10.3",
     "mobx": "^5.15.0",
     "mobx-react": "^6.1.4",
     "next": "^9.1.4",
     "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react-dom": "^16.12.0",
+    "react-flexview": "^4.0.4"
   }
 }

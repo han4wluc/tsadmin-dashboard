@@ -2,6 +2,7 @@
 import React from 'react'
 import DataTable from '../../components/DataTable'
 import TableList from '../../components/TableList'
+import FlexView from 'react-flexview';
 
 function EntityTable(props: any) {
     const {
@@ -17,19 +18,21 @@ function EntityTable(props: any) {
     } = props
 
     return (
-        <div>
-            <TableList
-                entities={entities}
-                selectEntityId={selectEntityId}
-                selectedEntityId={selectedEntityId}
-                loading={entitiesLoading}
-            />
+        <FlexView>
+            <FlexView width="200px" >
+                <TableList
+                    entities={entities}
+                    selectEntityId={selectEntityId}
+                    selectedEntityId={selectedEntityId}
+                    loading={entitiesLoading}
+                />
+            </FlexView>
             <DataTable
                 items={items}
                 loading={itemsLoading}
                 columns={columns}
             />
-        </div>
+        </FlexView>
     )
 }
 

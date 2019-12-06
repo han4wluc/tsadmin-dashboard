@@ -1,13 +1,11 @@
 import React from 'react'
-import Todo from '../components/Todo'
-import Clock from '../components/Clock'
-import TableList from '../components/TableList'
-import DataTable from '../components/DataTable'
-
+import { Layout } from 'antd';
 import EntityTable from '../containers/EntityTable'
 
-
 import { useStaticRendering } from 'mobx-react'
+
+
+const { Header, Footer, Content } = Layout
 
 const isServer = typeof window === 'undefined'
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -31,17 +29,15 @@ export default class Counter extends React.Component<any, any> {
 
   render() {
     return (
-        <div>
-            {/* <Todo ></Todo>
-            <Clock />
-            { this.state.show && <Todo></Todo> } */}
-            {/* <TableList /> */}
-
-            {/* <br /> */}
-
-            {/* <DataTable /> */}
-            <EntityTable />
-        </div>
+        <Layout>
+          <Header>Header</Header>
+            <Content style={{minHeight: '800px', backgroundColor: 'white', padding: '24px'}}>
+              <EntityTable />
+            </Content>
+            <Footer>
+              Footer
+            </Footer>
+        </Layout>
     )
   }
 }

@@ -2,6 +2,7 @@
 
 import { action, observable, computed } from 'mobx'
 import {BaseStore, IStoreDependencies} from '../../utils/mobxConnect'
+import EntityService from '../../services/api/EntityService'
 
 export type Entity = {
     id: number,
@@ -9,136 +10,19 @@ export type Entity = {
     columns: any
 }
 
-export interface IEntityTableDependencies extends IStoreDependencies {}
-
-
-
-const entitiesResult = {
-  "entities": [{
-      "id": 0,
-      "label": "users",
-      "deleatable": "true",
-      "columns": [{
-          "label": "id",
-          "type": "uuid",
-          "create": {
-              "display": "false"
-          },
-          "update": {
-              "display": "true",
-              "editable": "false"
-          }
-      }, {
-          "label": "username",
-          "type": "string",
-          "create": {
-              "display": "true"
-          },
-          "update": {
-              "display": "true",
-              "editable": "true"
-          }
-      }, {
-          "label": "nickname",
-          "type": "string",
-          "create": {
-              "display": "true"
-          },
-          "update": {
-              "display": "true",
-              "editable": "true"
-          }
-      }, {
-          "label": "age",
-          "type": "number",
-          "create": {
-              "display": "true",
-              "default": 18
-          },
-          "update": {
-              "display": "true",
-              "editable": "true"
-          }
-      }, {
-          "label": "gender",
-          "type": "enum",
-          "enum": ["male", "female"],
-          "create": {
-              "display": "true",
-              "default": "male"
-          },
-          "update": {
-              "display": "true",
-              "editable": "true"
-          }
-      }, {
-          "label": "company",
-          "type": "relationshipOne",
-          "relationshipModel": "Company",
-          "create": {
-              "display": "true"
-          },
-          "update": {
-              "display": "true",
-              "editable": "true"
-          }
-      }, {
-          "label": "articles",
-          "type": "relationshipMany",
-          "relationshipModel": "Article",
-          "create": {
-              "display": "true"
-          },
-          "update": {
-              "display": "true",
-              "editable": "true"
-          }
-      }, {
-          "label": "createdAt",
-          "type": "datetime",
-          "create": {
-              "display": "false"
-          },
-          "update": {
-              "display": "true",
-              "editable": "false"
-          }
-      }, {
-          "label": "updatedAt",
-          "type": "datetime",
-          "create": {
-              "display": "false"
-          },
-          "update": {
-              "display": "true",
-              "editable": "false"
-          }
-      }]
-  }],
-  "customFunctions": [{
-      "label": "somelabel",
-      "function": "sendNotificationToUser",
-      "form": {
-          "inputs": [{
-              "label": "alertNumber",
-              "type": "number",
-              "required": true,
-              "default": 4
-          }, {
-              "label": "company",
-              "type": "relationshipOne"
-              // ...
-          }, {
-              "label": "payload",
-              "type": "json"
-          }]
-      }
-  }]
+export interface IEntityTableDependencies extends IStoreDependencies {
+  entityService: EntityService
 }
 
-
-
 export class EntityTableStore extends BaseStore {
+
+  private entityService: EntityService
+
+  constructor(protected dependencies: IEntityTableDependencies) {
+    super(dependencies)
+    this.entityService = dependencies.entityService
+  }
+
   @observable entitiesLoading: boolean = true
   @observable entities: Entity[] = []
   @observable selectedEntityId?: number
@@ -146,19 +30,17 @@ export class EntityTableStore extends BaseStore {
   @observable itemsLoading: boolean = true
   @observable columns: any = []
 
+  @computed get currentEntity() {
+    if(this.selectedEntityId === undefined) {
+      return null
+    }
+    const entity = this.entities.filter(e => e.id === this.selectedEntityId)[0]
+    return entity
+  }
+
   @action fetchEntities = async () => {
     this.entitiesLoading = true
-    // await new Promise((resolve) => {
-    //   setTimeout(resolve, 1000)
-    // })
-    // this.entities = [{
-    //     id: 0,
-    //     label: 'entity1'
-    // }, {
-    //     id: 1,
-    //     label: 'entity2'
-    // }]
-    this.entities = entitiesResult.entities
+    this.entities = (await this.entityService.fetchEntities())['entities']
     this.entitiesLoading = false
     return Promise.resolve()
  }
@@ -170,40 +52,10 @@ export class EntityTableStore extends BaseStore {
 
   @action fetchData = async () => {
     this.itemsLoading = true
-
-    // await new Promise((resolve) => {
-    //   setTimeout(resolve, 1000)
-    // })
-
-    // this.items = [{
-    //     id: 0,
-    //     firstName: 'firstName1'
-    // }, {
-    //     id: 1,
-    //     firstName: 'firstName2'
-    // }]
-    this.items = [{
-      id: 0,
-      username: 'user1',
-      nickname: 'mick',
-      age: 8,
-      gender: 'male',
-      company: 'Gule',
-      articles: [],
-      createdAt: 123,
-      updatedAt: 943
-    }, {
-      id: 1,
-      username: 'user2',
-      nickname: 'mudord',
-      age: 12,
-      gender: 'male',
-      company: 'Gule',
-      articles: [],
-      createdAt: 126,
-      updatedAt: 903
-    }]
-    this.columns = entitiesResult.entities[0].columns
+    this.items = (await this.entityService.fetchItems())['items']
+    if (this.currentEntity){
+      this.columns = this.currentEntity.columns
+    }
     this.itemsLoading = false
   }
 

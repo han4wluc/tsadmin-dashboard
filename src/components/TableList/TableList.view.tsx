@@ -1,6 +1,6 @@
 
 import React from 'react'
-import {Spin} from 'antd'
+import {List} from 'antd'
 
 function TableList(props: any) {
     const {
@@ -10,29 +10,28 @@ function TableList(props: any) {
         loading
     } = props
 
-    const entityComps = entities.map((entity: any) => {
-        function handleOnClick() {
-            selectEntityId(entity.id)
-        }
-        const isSelected = selectedEntityId === entity.id
-        return (
-            <div style={{
-                color: isSelected ? 'red' : undefined
-            }} key={entity.id} onClick={handleOnClick}>
-                {entity.label}
-            </div>
-        )
-    })
-
     return (
-        <div>
-            <Spin spinning={loading}>
-                {entityComps}
-            </Spin>
-            <style jsx>{`
-                
-            `}</style>
-        </div>
+        <List
+            itemLayout="horizontal"
+            dataSource={entities}
+            loading={loading}
+            renderItem={(entity: any) => {
+                const isSelected = selectedEntityId === entity.id
+                function handleOnClick() {
+                    selectEntityId(entity.id)
+                }
+                return (
+                    <List.Item
+                        style={{
+                            color: isSelected ? 'red' : undefined
+                        }}
+                        key={entity.id}
+                        onClick={handleOnClick}
+                    >
+                        {entity.label}
+                    </List.Item>
+            )}}
+        />
     )
 }
 

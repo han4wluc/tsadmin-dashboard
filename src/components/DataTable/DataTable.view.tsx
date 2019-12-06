@@ -1,6 +1,6 @@
 
 import React from 'react'
-import {Table, Spin} from 'antd'
+import {Table} from 'antd'
 
 const {
     Column
@@ -50,14 +50,6 @@ function DataTable(props: any) {
                 size="small"
             >
                 {columnsComp}
-                {/* <Column
-                    title="id"
-                    dataIndex="id"
-                />
-                <Column
-                    title="fistName"
-                    dataIndex="firstName"
-                /> */}
             </Table>
             <style jsx>{`
                 
