@@ -29,6 +29,7 @@ export class EntityTableStore extends BaseStore {
   @observable items: object[] = []
   @observable itemsLoading: boolean = true
   @observable columns: any = []
+  @observable modalVisible: boolean = false
 
   @computed get currentEntity() {
     if(this.selectedEntityId === undefined) {
@@ -57,6 +58,14 @@ export class EntityTableStore extends BaseStore {
       this.columns = this.currentEntity.columns
     }
     this.itemsLoading = false
+  }
+
+  @action showModal = () => {
+    this.modalVisible = true
+  }
+
+  @action hideModal = () => {
+    this.modalVisible = false
   }
 
   mount() {

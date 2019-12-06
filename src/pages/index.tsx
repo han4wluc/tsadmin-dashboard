@@ -1,6 +1,7 @@
 import React from 'react'
 import { Layout } from 'antd';
 import EntityTable from '../containers/EntityTable'
+import ItemFrom from '../components/ItemForm'
 
 import { useStaticRendering } from 'mobx-react'
 
@@ -33,6 +34,7 @@ export default class Counter extends React.Component<any, any> {
           <Header>Header</Header>
             <Content style={{minHeight: '800px', backgroundColor: 'white', padding: '24px'}}>
               <EntityTable />
+              {/* <ItemFrom/> */}
             </Content>
             <Footer>
               Footer
