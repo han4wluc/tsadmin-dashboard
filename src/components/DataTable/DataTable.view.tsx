@@ -1,8 +1,9 @@
 
 import React from 'react'
-import {Table,Modal} from 'antd'
+import {Table,Modal, Tag} from 'antd'
 import ItemForm from '../ItemForm'
 import Action from './components/Action'
+import FlexView from 'react-flexview';
 
 const {
     Column
@@ -17,12 +18,19 @@ function DataTable(props: any) {
 
     const columnsComp = columns.map((column: any) => {
         const {
-            label
+            label,
+            type
         } = column
         return (
             <Column
                 key={label}
-                title={label}
+                // title={label}
+                title={() => (
+                    <FlexView column>
+                        <span>{label}</span>
+                        <Tag>{type}</Tag>
+                    </FlexView>
+                )}
                 dataIndex={label}
             />
         )
@@ -32,6 +40,7 @@ function DataTable(props: any) {
             key="actions"
             title="actions"
             dataIndex="actions"
+            width={100}
             render={(_, item: any) => {
                 const onSubmit = () => {
 

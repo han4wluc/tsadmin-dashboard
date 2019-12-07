@@ -4,159 +4,157 @@ const entitiesResult = {
     "entities": [{
         "id": 0,
         "label": "users",
-        "deleatable": "true",
+        "deleatable": true,
         "columns": [{
             "label": "id",
             "type": "uuid",
             "create": {
-                "display": "false"
+                "display": false
             },
             "update": {
-                "display": "true",
-                "editable": "false"
+                "display": true,
+                "editable": false
             }
         }, {
             "label": "username",
             "type": "string",
             "required": true,
             "create": {
-                "display": "true"
+                "display": true
             },
             "update": {
-                "display": "true",
-                "editable": "true"
+                "display": true,
+                "editable": true
             }
         }, {
             "label": "nickname",
             "type": "string",
             "create": {
-                "display": "true"
+                "display": true
             },
             "update": {
-                "display": "true",
-                "editable": "true"
+                "display": true,
+                "editable": true
             }
         },{
             "label": "birthday",
             "type": "date",
             "create": {
-                "display": "true",
+                "display": true,
             },
             "update": {
-                "display": "true",
-                "editable": "true"
+                "display": true,
+                "editable": true
             }
         }, {
             "label": "age",
             "type": "number",
             "create": {
-                "display": "true",
+                "display": true,
                 "default": 18
             },
             "update": {
-                "display": "true",
-                "editable": "true"
+                "display": true,
+                "editable": true
             }
         }, {
             "label": "notes",
             "type": "text",
             "create": {
-                "display": "true",
-                "default": "male"
+                "display": true
             },
             "update": {
-                "display": "true",
-                "editable": "true"
+                "display": true,
+                "editable": true
             }
         }, {
             "label": "meta",
             "type": "json",
             "create": {
-                "display": "true",
-                "default": "male"
+                "display": true
             },
             "update": {
-                "display": "true",
-                "editable": "true"
+                "display": true,
+                "editable": true
             }
         },{
             "label": "gender",
             "type": "enum",
             "enum": ["male", "female"],
             "create": {
-                "display": "true",
+                "display": true,
                 "default": "male"
             },
             "update": {
-                "display": "true",
-                "editable": "true"
+                "display": true,
+                "editable": true
             }
         }, {
             "label": "company",
             "type": "relationshipOne",
             "relationshipModel": "Company",
             "create": {
-                "display": "true"
+                "display": true
             },
             "update": {
-                "display": "true",
-                "editable": "true"
+                "display": true,
+                "editable": true
             }
         }, {
             "label": "articles",
             "type": "relationshipMany",
             "relationshipModel": "Article",
             "create": {
-                "display": "true"
+                "display": true
             },
             "update": {
-                "display": "true",
-                "editable": "true"
+                "display": true,
+                "editable": true
             }
         }, {
             "label": "createdAt",
             "type": "datetime",
             "create": {
-                "display": "false"
+                "display": false
             },
             "update": {
-                "display": "true",
-                "editable": "false"
+                "display": true,
+                "editable": false
             }
         }, {
             "label": "updatedAt",
             "type": "datetime",
             "create": {
-                "display": "false"
+                "display": false
             },
             "update": {
-                "display": "true",
-                "editable": "false"
+                "display": true,
+                "editable": false
             }
         }]
     }, {
       "id": 1,
       "label": "company",
-      "deleatable": "true",
+      "deleatable": true,
       "columns": [{
           "label": "id",
           "type": "uuid",
           "create": {
-              "display": "false"
+              "display": false
           },
           "update": {
-              "display": "true",
-              "editable": "false"
+              "display": true,
+              "editable": false
           }
       }, {
           "label": "name",
           "type": "string",
           "create": {
-              "display": "true"
+              "display": true
           },
           "update": {
-              "display": "true",
-              "editable": "true"
+              "display": true,
+              "editable": true
           }
       }],
     }],

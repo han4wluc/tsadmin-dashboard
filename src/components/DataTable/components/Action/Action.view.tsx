@@ -20,7 +20,7 @@ function Action(props: any) {
             <span>Delete</span>
             <Modal
                 key={item.id}
-                title="edit"
+                title="Update"
                 visible={visible}
                 onCancel={hide}
                 width="60%"
@@ -31,6 +31,7 @@ function Action(props: any) {
                     columns={columns}
                     item={item}
                     onSubmit={onSubmit}
+                    mode="update"
                 />
             </Modal>
         </div>

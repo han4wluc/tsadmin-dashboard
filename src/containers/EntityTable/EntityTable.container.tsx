@@ -24,7 +24,7 @@ function EntityTable(props: any) {
 
     return (
         <FlexView>
-            <FlexView width="200px" >
+            <FlexView basis={200}>
                 <TableList
                     entities={entities}
                     selectEntityId={selectEntityId}
@@ -32,9 +32,9 @@ function EntityTable(props: any) {
                     loading={entitiesLoading}
                 />
             </FlexView>
-            <FlexView column={true}>
+            <FlexView column={true} grow>
                 <FlexView hAlignContent="right" height="64px">
-                    <Button type="primary" onClick={showModal}>New</Button>
+                    <Button type="primary" onClick={showModal}>Create</Button>
                 </FlexView>
                 <DataTable
                     items={items}
@@ -43,7 +43,7 @@ function EntityTable(props: any) {
                 />
             </FlexView>
             <Modal
-                title="New"
+                title={`Create`}
                 onCancel={hideModal}
                 visible={modalVisible}
                 width="60%"
@@ -51,6 +51,7 @@ function EntityTable(props: any) {
             >
                 <ItemForm
                     columns={columns}
+                    mode="create"
                 />
             </Modal>
         </FlexView>
