@@ -14,19 +14,19 @@ useStaticRendering(isServer)
 
 export default class Counter extends React.Component<any, any> {
 
-  componentWillMount() {
-    this.setState({
-      show: true
-    })
-  }
+  // componentWillMount() {
+  //   this.setState({
+  //     show: true
+  //   })
+  // }
 
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({
-        show: false
-      })
-    }, 3000)
-  }
+  // componentDidMount() {
+  //   setTimeout(() => {
+  //     this.setState({
+  //       show: false
+  //     })
+  //   }, 3000)
+  // }
 
   render() {
     return (

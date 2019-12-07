@@ -37,6 +37,8 @@ function RegistrationForm(props: any) {
           finalValues[label] = values[label] ? values[label].format("YYYY-MM-DD") : undefined
         } else if(type === 'datetime') {
           finalValues[label] = values[label] ? JSON.stringify(values[label]) : undefined
+        } else if(type === 'json') {
+          finalValues[label] = values[label] ? JSON.parse(values[label]) : undefined
         } else {
           finalValues[label] = values[label]
         }
@@ -120,6 +122,12 @@ function RegistrationForm(props: any) {
     }
     if (type === 'text') {
       comp = <TextArea />
+    }
+
+    // TODO custom json component
+    if (type === 'json') {
+      comp = <TextArea />
+      initialValue = JSON.stringify(item[label], null, 2)
     }
 
 

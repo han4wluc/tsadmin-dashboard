@@ -69,6 +69,17 @@ const entitiesResult = {
                 "editable": "true"
             }
         }, {
+            "label": "meta",
+            "type": "json",
+            "create": {
+                "display": "true",
+                "default": "male"
+            },
+            "update": {
+                "display": "true",
+                "editable": "true"
+            }
+        },{
             "label": "gender",
             "type": "enum",
             "enum": ["male", "female"],
@@ -181,6 +192,10 @@ const itemsResult = {
         notes: 'he is very good',
         company: 'Gule',
         articles: [],
+        meta: {
+            id: 4,
+            count: 5
+        },
         createdAt: '2007-12-28T23:11:57.056-07:00',
         updatedAt: '2008-12-28T23:13:57.056-07:00'
       }, {
@@ -193,6 +208,11 @@ const itemsResult = {
         gender: 'male',
         company: 'Gule',
         articles: [],
+        meta: {
+            id: 3,
+            count: 5,
+            name: 'gjfaljkfealrjeaw wer'
+        },
         createdAt: '2007-12-28T23:11:57.056-07:00',
         updatedAt: '2008-12-28T23:13:57.056-07:00'
       }]
