@@ -18,7 +18,9 @@ function EntityTable(props: any) {
             columns,
             modalVisible,
             showModal,
-            hideModal
+            hideModal,
+            createEntityLoading,
+            createEntity
         }
     } = props
 
@@ -52,6 +54,9 @@ function EntityTable(props: any) {
                 <ItemForm
                     columns={columns}
                     mode="create"
+                    loading={createEntityLoading}
+                    onSubmit={createEntity}
+                    okText="Create"
                 />
             </Modal>
         </FlexView>

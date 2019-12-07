@@ -30,6 +30,7 @@ export class EntityTableStore extends BaseStore {
   @observable itemsLoading: boolean = true
   @observable columns: any = []
   @observable modalVisible: boolean = false
+  @observable createEntityLoading: boolean = false
 
   @computed get currentEntity() {
     if(this.selectedEntityId === undefined) {
@@ -66,6 +67,12 @@ export class EntityTableStore extends BaseStore {
 
   @action hideModal = () => {
     this.modalVisible = false
+  }
+
+  @action createEntity = async () => {
+    this.createEntityLoading = true
+    await this.entityService.createEntity()
+    this.createEntityLoading = false
   }
 
   mount() {

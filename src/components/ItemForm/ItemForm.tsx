@@ -9,9 +9,8 @@ import {
     Select,
     DatePicker,
     InputNumber,
-    Tag
 } from 'antd';
-import moment, { updateLocale } from 'moment'
+import moment from 'moment'
 
 const { TextArea } = Input;
 
@@ -19,7 +18,10 @@ const {
   Option
 } = Select
 
-function getIfDisabled(mode: string, create: any, update: any) {
+function getIfDisabled(mode: string, loading: boolean, create: any, update: any) {
+  if (loading) {
+    return true
+  }
   let disabled = false
   if (mode === 'create' && create.editable === false) {
     disabled = true
@@ -33,7 +35,7 @@ function getIfDisabled(mode: string, create: any, update: any) {
 function RegistrationForm(props: any) {  
 
   const { getFieldDecorator } = props.form;
-  const { columns, item={}, mode } = props
+  const { columns, item={}, mode, loading, onSubmit, okText } = props
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -45,7 +47,7 @@ function RegistrationForm(props: any) {
 
       columns.forEach((column: any) => {
         const { label, type, create, update } = column
-        const disabled = getIfDisabled(mode, create, update)
+        const disabled = getIfDisabled(mode, loading, create, update)
         if (disabled === true) {
           return
         }
@@ -61,6 +63,7 @@ function RegistrationForm(props: any) {
       })
 
       console.log('Received values of form: ', finalValues);
+      onSubmit && onSubmit(finalValues)
     });
   };
 
@@ -114,9 +117,7 @@ function RegistrationForm(props: any) {
       )
     }
 
-
-
-    const disabled = getIfDisabled(mode, create, update)
+    const disabled = getIfDisabled(mode, loading, create, update)
 
     let comp = <Input disabled={disabled} />
     let initialValue = item[label]
@@ -185,8 +186,8 @@ function RegistrationForm(props: any) {
     <Form {...formItemLayout} onSubmit={handleSubmit}>
       {formsComp}
       <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" htmlType="submit">
-          Register
+        <Button type="primary" htmlType="submit" loading={loading}>
+          {okText}
         </Button>
       </Form.Item>
     </Form>

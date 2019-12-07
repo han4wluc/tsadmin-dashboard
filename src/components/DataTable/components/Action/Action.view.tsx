@@ -6,11 +6,13 @@ import ItemForm from '../../../ItemForm'
 
 function Action(props: any) {
     const {
-        columns, onSubmit, item,
+        columns, item,
         store: {
             hide,
             show,
-            visible
+            visible,
+            updateEntity,
+            loading
         }
     } = props
 
@@ -30,8 +32,10 @@ function Action(props: any) {
                 <ItemForm
                     columns={columns}
                     item={item}
-                    onSubmit={onSubmit}
+                    onSubmit={updateEntity}
                     mode="update"
+                    loading={loading}
+                    okText="Update"
                 />
             </Modal>
         </div>

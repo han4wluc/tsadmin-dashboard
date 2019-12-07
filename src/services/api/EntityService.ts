@@ -217,6 +217,19 @@ const itemsResult = {
 }
 
 class EntityService {
+
+    createEntity = async () => {
+        return new Promise((resolve) => {
+            setTimeout(resolve, 2000)
+        })
+    }
+
+    updateEntity = async () => {
+        return new Promise((resolve) => {
+            setTimeout(resolve, 2000)
+        })
+    }
+
     fetchEntities = async () => {
         return Promise.resolve(entitiesResult)
     }
