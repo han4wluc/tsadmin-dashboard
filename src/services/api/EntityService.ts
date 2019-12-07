@@ -18,6 +18,7 @@ const entitiesResult = {
         }, {
             "label": "username",
             "type": "string",
+            "required": true,
             "create": {
                 "display": "true"
             },

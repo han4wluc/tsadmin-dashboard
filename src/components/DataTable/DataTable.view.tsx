@@ -2,6 +2,7 @@
 import React from 'react'
 import {Table,Modal} from 'antd'
 import ItemForm from '../ItemForm'
+import Action from './components/Action'
 
 const {
     Column
@@ -12,11 +13,6 @@ function DataTable(props: any) {
         items,
         loading,
         columns,
-        store: {
-            visible,
-            show,
-            hide
-        }
     } = props
 
     const columnsComp = columns.map((column: any) => {
@@ -36,27 +32,16 @@ function DataTable(props: any) {
             key="actions"
             title="actions"
             dataIndex="actions"
-            render={() => {
+            render={(_, item: any) => {
                 const onSubmit = () => {
 
                 }
                 return (
-                    <div>
-                        <span onClick={show}>Edit{'  '}</span>
-                        <span>Delete</span>
-                        <Modal
-                            title="edit"
-                            visible={visible}
-                            onCancel={hide}
-                            width="60%"
-                            footer={null}
-                        >
-                            <ItemForm
-                                columns={columns}
-                                onSubmit={onSubmit}
-                            />
-                        </Modal>
-                    </div>
+                    <Action
+                        item={item}
+                        columns={columns}
+                        onSubmit={onSubmit}
+                    />
                 )
             }}
         />

@@ -1,10 +1,10 @@
 
 import { action, observable } from 'mobx'
-import {BaseStore, IStoreDependencies} from '../../utils/mobxConnect'
+import {BaseStore, IStoreDependencies} from '../../../../utils/mobxConnect'
 
-export interface IDataTableDependencies extends IStoreDependencies {}
+export interface IActionDependencies extends IStoreDependencies {}
 
-export class DataTableStore extends BaseStore {
+export class ActionStore extends BaseStore {
   @observable visible: boolean = false
 
   @action show = () => {

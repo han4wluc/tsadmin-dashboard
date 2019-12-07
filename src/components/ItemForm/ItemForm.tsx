@@ -3,8 +3,15 @@ import React from 'react'
 import {
     Form,
     Input,
-    Button
+    Button,
+    Tooltip,
+    Icon,
+    Select
 } from 'antd';
+
+const {
+  Option
+} = Select
 
 function RegistrationForm(props: any) {  
   const handleSubmit = (e: any) => {
@@ -17,7 +24,9 @@ function RegistrationForm(props: any) {
   };
 
   const { getFieldDecorator } = props.form;
-  const { columns } = props
+  const { columns, item={} } = props
+
+  console.warn('item', item.id, item.label)
 
   const formItemLayout = {
     labelCol: {
@@ -45,13 +54,45 @@ function RegistrationForm(props: any) {
   const formsComp = columns.map((column: any) => {
     const {
       label,
-      value
+      type,
+      enum: enums,
+      required
     } = column
+    const rules: any = []
+    if (required) {
+      rules.push(
+        {
+          required: true,
+          message: 'Field is required',
+        }
+      )
+    }
+    let comp = <Input />
+    if (type === 'enum') {
+      const options = enums.map((e: string) => {
+        return (
+          <Option key={e} value={e}>{e}</Option>
+        )
+      })
+      comp = (
+        <Select>
+          {options}
+        </Select>
+      )
+    }
     return (
-      <Form.Item label={label}>
+      <Form.Item key={label} label={(
+        <span>
+          <span style={{marginRight: 4}}>{label}</span>
+          <Tooltip title={label}>
+            <Icon type="question-circle-o" />
+          </Tooltip>
+        </span>
+      )}>
         {getFieldDecorator(label, {
-          initialValue: value
-        })(<Input />)}
+          initialValue: item[label],
+          rules
+        })(comp)}
       </Form.Item> 
     )
   })
