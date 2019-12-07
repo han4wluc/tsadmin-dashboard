@@ -6,27 +6,47 @@ import {
     Button,
     Tooltip,
     Icon,
-    Select
+    Select,
+    DatePicker,
+    InputNumber
 } from 'antd';
+import moment from 'moment'
+
+const { TextArea } = Input;
 
 const {
   Option
 } = Select
 
 function RegistrationForm(props: any) {  
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    props.form.validateFieldsAndScroll((err: any, values: any) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-      }
-    });
-  };
 
   const { getFieldDecorator } = props.form;
   const { columns, item={} } = props
 
-  console.warn('item', item.id, item.label)
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    props.form.validateFieldsAndScroll((err: any, values: any) => {
+      if (err) {
+        return 
+      }
+      const finalValues: any = {}
+
+      columns.forEach((column: any) => {
+        const { label, type } = column
+        if (type === 'date') {
+          finalValues[label] = values[label] ? values[label].format("YYYY-MM-DD") : undefined
+        } else if(type === 'datetime') {
+          finalValues[label] = values[label] ? JSON.stringify(values[label]) : undefined
+        } else {
+          finalValues[label] = values[label]
+        }
+      })
+
+      console.log('Received values of form: ', finalValues);
+    });
+  };
+
+
 
   const formItemLayout = {
     labelCol: {
@@ -67,7 +87,10 @@ function RegistrationForm(props: any) {
         }
       )
     }
+
     let comp = <Input />
+    let initialValue = item[label]
+
     if (type === 'enum') {
       const options = enums.map((e: string) => {
         return (
@@ -80,6 +103,26 @@ function RegistrationForm(props: any) {
         </Select>
       )
     }
+    if (type === 'number') {
+      comp = <InputNumber style={{width: 300}}/>
+    }
+    if (type === 'datetime') {
+      comp = <DatePicker showTime placeholder="Select Date and Time" />
+      if (item[label]) {
+        initialValue = moment(item[label])
+      }
+    }
+    if (type === 'date') {
+      comp = <DatePicker placeholder="Select Date" />
+      if (item[label]) {
+        initialValue = moment(item[label])
+      }
+    }
+    if (type === 'text') {
+      comp = <TextArea />
+    }
+
+
     return (
       <Form.Item key={label} label={(
         <span>
@@ -90,7 +133,7 @@ function RegistrationForm(props: any) {
         </span>
       )}>
         {getFieldDecorator(label, {
-          initialValue: item[label],
+          initialValue,
           rules
         })(comp)}
       </Form.Item> 
