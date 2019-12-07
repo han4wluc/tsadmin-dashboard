@@ -6,7 +6,7 @@ import ItemForm from '../../../ItemForm'
 
 function Action(props: any) {
     const {
-        columns, item,
+        columns, item, entity, replaceOneItem, deleteItem,
         store: {
             hide,
             show,
@@ -16,10 +16,25 @@ function Action(props: any) {
         }
     } = props
 
+    const handleSubmit = (data: any) => {
+        if(!entity) {
+            return
+        }
+        updateEntity(entity, item.id, data, replaceOneItem)
+    }
+
+    const handleDelete = () => {
+        Modal.confirm({
+            content: 'Delete item?',
+            onOk: () => deleteItem(item.id)
+        })
+        
+    }
+
     return (
         <div>
             <span onClick={show}>Edit{'  '}</span>
-            <span>Delete</span>
+            <span onClick={handleDelete}>Delete</span>
             <Modal
                 key={item.id}
                 title="Update"
@@ -32,7 +47,7 @@ function Action(props: any) {
                 <ItemForm
                     columns={columns}
                     item={item}
-                    onSubmit={updateEntity}
+                    onSubmit={handleSubmit}
                     mode="update"
                     loading={loading}
                     okText="Update"

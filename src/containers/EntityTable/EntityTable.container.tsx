@@ -13,6 +13,8 @@ function EntityTable(props: any) {
             entitiesLoading,
             selectEntityId,
             selectedEntityId,
+            deleteItem,
+            currentEntity,
             items,
             itemsLoading,
             columns,
@@ -20,7 +22,8 @@ function EntityTable(props: any) {
             showModal,
             hideModal,
             createEntityLoading,
-            createEntity
+            createEntity,
+            replaceOneItem
         }
     } = props
 
@@ -39,9 +42,12 @@ function EntityTable(props: any) {
                     <Button type="primary" onClick={showModal}>Create</Button>
                 </FlexView>
                 <DataTable
+                    replaceOneItem={replaceOneItem}
+                    entity={currentEntity}
                     items={items}
                     loading={itemsLoading}
                     columns={columns}
+                    deleteItem={deleteItem}
                 />
             </FlexView>
             <Modal

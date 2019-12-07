@@ -1,7 +1,6 @@
 
 import React from 'react'
-import {Table,Modal, Tag} from 'antd'
-import ItemForm from '../ItemForm'
+import {Table, Tag} from 'antd'
 import Action from './components/Action'
 import FlexView from 'react-flexview';
 
@@ -11,9 +10,12 @@ const {
 
 function DataTable(props: any) {
     const {
+        replaceOneItem,
+        entity,
         items,
         loading,
         columns,
+        deleteItem,
     } = props
 
     const columnsComp = columns.map((column: any) => {
@@ -47,6 +49,9 @@ function DataTable(props: any) {
                 }
                 return (
                     <Action
+                        deleteItem={deleteItem}
+                        replaceOneItem={replaceOneItem}
+                        entity={entity}
                         item={item}
                         columns={columns}
                         onSubmit={onSubmit}
@@ -63,6 +68,7 @@ function DataTable(props: any) {
                 rowKey="id"
                 loading={loading}
                 size="small"
+                bordered={true}
             >
                 {columnsComp}
             </Table>

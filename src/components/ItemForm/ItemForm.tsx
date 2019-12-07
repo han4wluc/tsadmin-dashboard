@@ -45,7 +45,15 @@ function RegistrationForm(props: any) {
       }
       const finalValues: any = {}
 
-      columns.forEach((column: any) => {
+      columns.filter((column: any) => {
+        if(mode === 'create'){
+          return column.create && column.create.display === true
+        }
+        if(mode === 'update') {
+          return column.update && column.update.display === true
+        }
+        return true
+      }).forEach((column: any) => {
         const { label, type, create, update } = column
         const disabled = getIfDisabled(mode, loading, create, update)
         if (disabled === true) {

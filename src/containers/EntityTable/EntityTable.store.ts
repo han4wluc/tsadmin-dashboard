@@ -1,6 +1,7 @@
 
 
 import { action, observable, computed } from 'mobx'
+import { message} from 'antd'
 import {BaseStore, IStoreDependencies} from '../../utils/mobxConnect'
 import EntityService from '../../services/api/EntityService'
 
@@ -53,8 +54,11 @@ export class EntityTableStore extends BaseStore {
   }
 
   @action fetchData = async () => {
+    if (!this.currentEntity) {
+      return
+    }
     this.itemsLoading = true
-    this.items = (await this.entityService.fetchItems())['items']
+    this.items = (await this.entityService.fetchItems(this.currentEntity.label))['items']
     if (this.currentEntity){
       this.columns = this.currentEntity.columns
     }
@@ -69,10 +73,34 @@ export class EntityTableStore extends BaseStore {
     this.modalVisible = false
   }
 
-  @action createEntity = async () => {
+  @action createEntity = async (data: any) => {
+    if (!this.currentEntity) {
+      return
+    }
     this.createEntityLoading = true
-    await this.entityService.createEntity()
+    await this.entityService.createEntity(this.currentEntity.label, data)
     this.createEntityLoading = false
+    this.modalVisible = false
+    message.success('Update successful')
+    this.fetchData()
+  }
+
+  @action replaceOneItem = async (item: any) => {
+    const items = this.items.concat([])
+    const index = items.map((i:any) => i.id).indexOf(item.id)
+    if (index !== -1) {
+      items[index] = item
+    }
+    this.items = items
+  }
+
+  @action deleteItem = async(id: any) => {
+    if (!this.currentEntity) {
+      return
+    }
+    await this.entityService.deleteItem(this.currentEntity.label, id)
+    message.success('Item deleted')
+    this.fetchData()
   }
 
   mount() {

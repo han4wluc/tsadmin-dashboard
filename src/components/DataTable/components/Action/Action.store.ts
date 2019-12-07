@@ -1,5 +1,6 @@
 
 import { action, observable } from 'mobx'
+import {message} from 'antd'
 import {BaseStore, IStoreDependencies} from '../../../../utils/mobxConnect'
 import EntityService from '../../../../services/api/EntityService'
 
@@ -26,10 +27,14 @@ export class ActionStore extends BaseStore {
       this.visible = false
   }
 
-  @action updateEntity = async() => {
+  @action updateEntity = async(entity: any, id: any, data: any, callback: any) => {
     this.loading = true
-    await this.entityService.updateEntity()
+    const item = await this.entityService.updateEntity(entity.label, id, data)
+    message.success('Update successful')
     this.loading = false
+    this.visible = false
+    callback && callback(item)
+    return item
   }
 
 }
