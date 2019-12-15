@@ -3,7 +3,7 @@ import { assert } from 'chai'
 import 'mocha';
 
 import {TodoStore} from '../Todo.store'
-import {counterService} from '../../../services/api/CounterService'
+import {counterService} from '~/services/api/CounterService'
 
 describe('Todo.store', () => {
 

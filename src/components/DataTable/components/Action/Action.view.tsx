@@ -2,7 +2,7 @@
 
 
 import {Modal} from 'antd'
-import ItemForm from '../../../ItemForm'
+import ItemForm from '~/components/ItemForm'
 
 function Action(props: any) {
     const {

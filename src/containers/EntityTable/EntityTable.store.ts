@@ -2,8 +2,8 @@
 
 import { action, observable, computed } from 'mobx'
 import { message} from 'antd'
-import {BaseStore, IStoreDependencies} from '../../utils/mobxConnect'
-import EntityService from '../../services/api/EntityService'
+import {BaseStore, IStoreDependencies} from '~/utils/mobxConnect'
+import EntityService from '~/services/api/EntityService'
 
 export type Entity = {
     id: number,

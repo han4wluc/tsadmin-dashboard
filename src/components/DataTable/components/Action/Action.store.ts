@@ -1,8 +1,8 @@
 
 import { action, observable } from 'mobx'
 import {message} from 'antd'
-import {BaseStore, IStoreDependencies} from '../../../../utils/mobxConnect'
-import EntityService from '../../../../services/api/EntityService'
+import {BaseStore, IStoreDependencies} from '~/utils/mobxConnect'
+import EntityService from '~/services/api/EntityService'
 
 export interface IActionDependencies extends IStoreDependencies {
     entityService: EntityService

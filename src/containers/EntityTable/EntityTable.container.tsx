@@ -1,9 +1,9 @@
 
 import React from 'react'
 import {Button, Modal} from 'antd'
-import DataTable from '../../components/DataTable'
-import TableList from '../../components/TableList'
-import ItemForm from '../../components/ItemForm'
+import DataTable from '~/components/DataTable'
+import TableList from '~/components/TableList'
+import ItemForm from '~/components/ItemForm'
 import FlexView from 'react-flexview';
 
 function EntityTable(props: any) {
