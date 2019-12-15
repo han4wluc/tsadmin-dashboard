@@ -7,8 +7,8 @@
     "dev": "next ./src",
     "build": "next build ./src",
     "start": "next start ./src",
-    "test": "TS_NODE_PROJECT=tsconfig.mocha.json mocha -r ts-node/register -r tsconfig-paths/register tests/**/*.spec.ts src/**/*.spec.ts tests/**/*.spec.ts src/**/*.spec.tsx --watch --ignore node_modules --extension ts,tsx --recursive",
-    "test:watch": "TS_NODE_PROJECT=tsconfig.mocha.json mocha -r ts-node/register -r tsconfig-paths/register tests/**/*.spec.ts src/**/*.spec.ts tests/**/*.spec.ts src/**/*.spec.tsx --watch --ignore node_modules --extension ts,tsx --recursive"
+    "test": "TS_NODE_PROJECT=tsconfig.mocha.json mocha --opts tests/mocha.opts",
+    "test:watch": "TS_NODE_PROJECT=tsconfig.mocha.json mocha --opts tests/mocha.opts --watch"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.7.4",
