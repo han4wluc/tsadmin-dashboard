@@ -4,6 +4,7 @@ import { action, observable, computed } from 'mobx'
 import { message} from 'antd'
 import {BaseStore, IStoreDependencies} from '~/utils/mobxConnect'
 import EntityService from '~/services/api/EntityService'
+import ResourceStore from '~/stores/ResourceStore'
 
 export type Entity = {
     id: number,
@@ -23,22 +24,34 @@ enum ModalMode {
 export class EntityTableStore extends BaseStore {
 
   private entityService: EntityService
+  private entitiesResource: ResourceStore<Entity>
+  private itemsResource: ResourceStore<object>
 
   constructor(protected dependencies: IEntityTableDependencies) {
     super(dependencies)
     this.entityService = dependencies.entityService
+    this.entitiesResource = new ResourceStore<Entity>([], (x) => x.id)
+    this.itemsResource = new ResourceStore<object>([], (x: any) => x.id)
   }
 
   @observable entitiesLoading: boolean = true
-  @observable entities: Entity[] = []
+  // @observable entities: Entity[] = []
   @observable selectedEntityId?: number
-  @observable items: object[] = []
+  // @observable items: object[] = []
   @observable itemsLoading: boolean = true
   @observable columns: any = []
   @observable modalVisible: boolean = false
   @observable modalMode: ModalMode = ModalMode.create
   @observable createItemLoading: boolean = false
   @observable currentEditItemId?: number | string
+
+  @computed get entities() {
+    return this.entitiesResource.items
+  }
+
+  @computed get items() {
+    return this.itemsResource.items
+  }
 
   @computed get currentEntity() {
     if(this.selectedEntityId === undefined) {
@@ -48,9 +61,19 @@ export class EntityTableStore extends BaseStore {
     return entity
   }
 
+  @computed get currentEditItem() {
+    console.warn('this.items', this.items, this.items.filter)
+    return this.items.filter((i: any) => i.id == this.currentEditItemId)[0]
+  }
+
+  @computed get modalTitle() {
+    return this.modalMode === ModalMode.create ? 'Create' : 'Edit'
+  }
+
   @action fetchEntities = async () => {
     this.entitiesLoading = true
-    this.entities = (await this.entityService.fetchEntities())['entities']
+    const entities = (await this.entityService.fetchEntities())['entities']
+    this.entitiesResource.replace(entities)
     this.entitiesLoading = false
     return Promise.resolve()
  }
@@ -65,7 +88,8 @@ export class EntityTableStore extends BaseStore {
       return
     }
     this.itemsLoading = true
-    this.items = (await this.entityService.fetchItems(this.currentEntity.label))['items']
+    const items = (await this.entityService.fetchItems(this.currentEntity.label))['items']
+    this.itemsResource.replace(items)
     if (this.currentEntity){
       this.columns = this.currentEntity.columns
     }
@@ -82,9 +106,6 @@ export class EntityTableStore extends BaseStore {
     this.showModal(ModalMode.create)
   }
 
-  @computed get currentEditItem() {
-    return this.items.filter((i: any) => i.id == this.currentEditItemId)[0]
-  }
 
   onSubmitForm = (data: any) => {
     if (this.modalMode === ModalMode.create) {
@@ -94,9 +115,7 @@ export class EntityTableStore extends BaseStore {
     this.updateItem(data)
   }
 
-  @computed get modalTitle() {
-    return this.modalMode === ModalMode.create ? 'Create' : 'Edit'
-  }
+
 
   @action showUpdateModal = (itemId: string | number) => {
     this.currentEditItemId = itemId
@@ -125,21 +144,22 @@ export class EntityTableStore extends BaseStore {
     }
     this.createItemLoading = true
     const item = await this.entityService.updateItem(this.currentEntity.label, this.currentEditItemId, data)
-    this.replaceOneItem(item)
+    // this.replaceOneItem(item)
+    this.itemsResource.append(item)
     message.success('Update successful')
     this.createItemLoading = false
     this.modalVisible = false
     return item
   }
 
-  @action replaceOneItem = async (item: any) => {
-    const items = this.items.concat([])
-    const index = items.map((i:any) => i.id).indexOf(item.id)
-    if (index !== -1) {
-      items[index] = item
-    }
-    this.items = items
-  }
+  // @action replaceOneItem = async (item: any) => {
+  //   const items = this.items.concat([])
+  //   const index = items.map((i:any) => i.id).indexOf(item.id)
+  //   if (index !== -1) {
+  //     items[index] = item
+  //   }
+  //   this.items = items
+  // }
 
   @action deleteItem = async(id: any) => {
     if (!this.currentEntity) {
@@ -149,6 +169,7 @@ export class EntityTableStore extends BaseStore {
     message.success('Item deleted')
     this.fetchData()
   }
+  
 
   mount() {
       this.fetchEntities().then(() => {

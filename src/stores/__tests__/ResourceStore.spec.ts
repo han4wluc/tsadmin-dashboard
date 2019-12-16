@@ -55,7 +55,7 @@ describe('ResourceStore', () => {
             }, false)
             assert.deepEqual(store.items, [{
                 id: 0,
-                name: 'me'
+                name: 'you'
             }])
         })
     })
@@ -101,6 +101,14 @@ describe('ResourceStore', () => {
                 id: 1,
                 name: 'you'
             }])
+        })
+    })
+
+    describe('ResourceStore#replace', () => {
+        it('should replace items', () => {
+            const store = new ResourceStore([1, 2, 3])
+            store.replace([4,5,6])
+            assert.deepEqual(store.items, [4,5,6])
         })
     })
 })

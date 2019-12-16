@@ -19,10 +19,12 @@ class ResourceStore<T> {
             this.items.push(item)
             return
         }
-        const found = this.items.map(this.idExtractor).includes(this.idExtractor(item))
-        if (!found) {
+        const index = this.items.map(this.idExtractor).indexOf(this.idExtractor(item))
+        if (index === -1) {
             this.items.push(item)
+            return
         }
+        this.items[index] = item
     }
   
     @action appendMultiple(items: T[], allowDuplicate: boolean = false) {
@@ -33,6 +35,10 @@ class ResourceStore<T> {
         items.forEach((item) => {
             this.append(item, allowDuplicate)
         })
+    }
+
+    @action replace(items: T[]) {
+        this.items = items
     }
   
     @action remove(id: any) {

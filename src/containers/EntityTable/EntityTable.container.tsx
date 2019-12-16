@@ -48,6 +48,7 @@ function EntityTable(props: {
                 footer={null}
             >
                 <ItemForm
+                    key={String(s.modalVisible)}
                     columns={s.columns}
                     mode={s.modalMode}
                     item={s.currentEditItem}
