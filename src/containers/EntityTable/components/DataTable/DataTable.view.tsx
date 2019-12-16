@@ -1,7 +1,6 @@
 
 import React from 'react'
 import {Table, Tag} from 'antd'
-import Action from './components/Action'
 import FlexView from 'react-flexview';
 
 const {
@@ -10,14 +9,10 @@ const {
 
 function DataTable(props: any) {
     const {
-        replaceOneItem,
-        entity,
         items,
         loading,
         columns,
-        deleteItem,
-        onClickEdit,
-        onSubmitForm
+        renderAction
     } = props
 
     const columnsComp = columns.map((column: any) => {
@@ -28,7 +23,6 @@ function DataTable(props: any) {
         return (
             <Column
                 key={label}
-                // title={label}
                 title={() => (
                     <FlexView column>
                         <span>{label}</span>
@@ -45,25 +39,7 @@ function DataTable(props: any) {
             title="actions"
             dataIndex="actions"
             width={100}
-            render={(_, item: any) => {
-                const onSubmit = () => {
-
-                }
-                const handleOnClickEdit = () => {
-                    onClickEdit(item.id)
-                }
-                return (
-                    <Action
-                        deleteItem={deleteItem}
-                        replaceOneItem={replaceOneItem}
-                        entity={entity}
-                        item={item}
-                        columns={columns}
-                        onSubmit={onSubmitForm}
-                        onClickEdit={handleOnClickEdit}
-                    />
-                )
-            }}
+            render={renderAction}
         />
     )
 
