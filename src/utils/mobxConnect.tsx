@@ -1,17 +1,19 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useMemo} from 'react'
 import { observer } from 'mobx-react'
 
 
 interface IConnectPramaters<T> {
     isGlobal: boolean,
     Store: any,
-    dependencies: T
+    dependencies: T,
+    renderFunctions?: any
 }
 
 function connect<T>({
     isGlobal,
     Store,
-    dependencies
+    dependencies,
+    renderFunctions = () => {}
 }: IConnectPramaters<T>) {
     return (Element: any) => {
         return (props: any) => {
@@ -23,8 +25,11 @@ function connect<T>({
                     store.unmount()
                 }
             }, [store])
+            const renderFunctionProps = useMemo(() => {
+                return renderFunctions(store)
+            }, [store, renderFunctions])
             return (
-                <OElement {...props} store={store} />
+                <OElement {...props} {...renderFunctionProps} store={store} />
             )
         }
     }
