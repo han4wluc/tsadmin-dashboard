@@ -16,7 +16,7 @@ export default (s: EntityTableStore) => {
             )
         },
         renderEntity:(entity: any) => {
-            const isSelected = s.selectedEntityId === entity.id
+            const isSelected = s.currentEntity && (s.currentEntity.id === entity.id)
             return (
                 <EntityListItem
                     entity={entity}

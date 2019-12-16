@@ -12,15 +12,33 @@ describe('ResourceStore', () => {
     };
 
     describe('ResourceStore#constructor', () => {
-        it('should initiate with empty array', () => {
+        it('should initiate with empty values', () => {
             const store = new ResourceStore()
             assert.deepEqual(store.items, [])
+            assert.equal(store.selectedId, undefined)
+            assert.equal(store.selectedItem, undefined)
         })
 
         it('should initiate with passed value', () => {
             const items = [1, 2, 3]
             const store = new ResourceStore<number>(items)
             assert.deepEqual(store.items, items)
+        })
+
+        it('should initialize with selectedId', () => {
+            const users = [{
+                id: 0,
+                name: 'me'
+            }, {
+                id: 1,
+                name: 'you'
+            }]
+            const store = new ResourceStore<UserType>(users, (x) => x.id, 1)
+            assert.equal(store.selectedId, 1)
+            assert.deepEqual(store.selectedItem, {
+                id: 1,
+                name: 'you'
+            })
         })
     })
 
@@ -110,5 +128,19 @@ describe('ResourceStore', () => {
             store.replace([4,5,6])
             assert.deepEqual(store.items, [4,5,6])
         })
+    })
+
+    describe('ResourceStore#setSelectedId', () => {
+        it('should set selectedId', () => {
+            const store = new ResourceStore([])
+            store.setSelectedId(1)
+            assert.equal(store.selectedId, 1)
+        })
+    })
+
+    describe('ResourceStore#removeSelectedId', () => {
+        const store = new ResourceStore([], (x) => x, 1)
+        store.removeSelectedId()
+        assert.equal(store.selectedId, undefined)
     })
 })

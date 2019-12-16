@@ -1,18 +1,29 @@
 
-import { action, observable } from 'mobx'
+import { action, observable, computed } from 'mobx'
 
 class ResourceStore<T> {
     constructor(
         items: T[] = [],
-        idExtractor: (item: T) => any = (x) => x
+        idExtractor: (item: T) => any = (x) => x,
+        selectedId?: any
     ) {
         this.items = items
         this.idExtractor = idExtractor
+        this.selectedId = selectedId
     }
-  
-    @observable items: T[]
 
     private idExtractor: (item: T) => boolean
+  
+    @observable items: T[]
+    @observable selectedId?: any
+
+    @computed get selectedItem() {
+        if(this.selectedId === undefined) {
+            return undefined
+        }
+        const selectedItem = this.items.filter(e => this.idExtractor(e) === this.selectedId)[0]
+        return selectedItem
+    }
     
     @action append(item: T, allowDuplicate: boolean = false) {
         if (allowDuplicate) {
@@ -43,6 +54,14 @@ class ResourceStore<T> {
   
     @action remove(id: any) {
         this.items = this.items.filter((x) => this.idExtractor(x) !== id)
+    }
+
+    @action setSelectedId(id: any) {
+        this.selectedId = id
+    }
+
+    @action removeSelectedId() {
+        this.selectedId = undefined
     }
 }
 
