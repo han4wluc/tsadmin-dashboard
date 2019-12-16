@@ -3,12 +3,12 @@ import axios from 'axios'
 
 class EntityService {
 
-    createEntity = async (entityName: string, data: any) => {
+    createItem = async (entityName: string, data: any) => {
         const res = await axios.post<any, any>(`http://localhost:8000/${entityName}`, data)
         return res.data
     }
 
-    updateEntity = async (entityName: string, id: any, data: any) => {
+    updateItem = async (entityName: string, id: any, data: any) => {
         const res = await axios.patch<any, any>(`http://localhost:8000/${entityName}/${id}`, data)
         return res.data
     }

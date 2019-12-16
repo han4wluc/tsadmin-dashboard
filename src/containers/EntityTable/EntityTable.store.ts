@@ -15,6 +15,11 @@ export interface IEntityTableDependencies extends IStoreDependencies {
   entityService: EntityService
 }
 
+enum ModalMode {
+  create = 'create',
+  update = 'update'
+}
+
 export class EntityTableStore extends BaseStore {
 
   private entityService: EntityService
@@ -31,7 +36,9 @@ export class EntityTableStore extends BaseStore {
   @observable itemsLoading: boolean = true
   @observable columns: any = []
   @observable modalVisible: boolean = false
-  @observable createEntityLoading: boolean = false
+  @observable modalMode: ModalMode = ModalMode.create
+  @observable createItemLoading: boolean = false
+  @observable currentEditItemId?: number | string
 
   @computed get currentEntity() {
     if(this.selectedEntityId === undefined) {
@@ -65,24 +72,64 @@ export class EntityTableStore extends BaseStore {
     this.itemsLoading = false
   }
 
-  @action showModal = () => {
+  @action showModal = (modalMode: ModalMode) => {
     this.modalVisible = true
+    this.modalMode = modalMode
+  }
+
+  @action showCreateModal = () => {
+    this.currentEditItemId = undefined
+    this.showModal(ModalMode.create)
+  }
+
+  @computed get currentEditItem() {
+    return this.items.filter((i: any) => i.id == this.currentEditItemId)[0]
+  }
+
+  onSubmitForm = (data: any) => {
+    if (this.modalMode === ModalMode.create) {
+      this.createItem(data)
+      return
+    }
+    this.updateItem(data)
+  }
+
+  @computed get modalTitle() {
+    return this.modalMode === ModalMode.create ? 'Create' : 'Edit'
+  }
+
+  @action showUpdateModal = (itemId: string | number) => {
+    this.currentEditItemId = itemId
+    this.showModal(ModalMode.update)
   }
 
   @action hideModal = () => {
     this.modalVisible = false
   }
 
-  @action createEntity = async (data: any) => {
+  @action createItem = async (data: any) => {
     if (!this.currentEntity) {
       return
     }
-    this.createEntityLoading = true
-    await this.entityService.createEntity(this.currentEntity.label, data)
-    this.createEntityLoading = false
+    this.createItemLoading = true
+    await this.entityService.createItem(this.currentEntity.label, data)
+    this.createItemLoading = false
     this.modalVisible = false
     message.success('Update successful')
     this.fetchData()
+  }
+
+  @action updateItem = async (data: any) => {
+    if (!this.currentEntity) {
+      return
+    }
+    this.createItemLoading = true
+    const item = await this.entityService.updateItem(this.currentEntity.label, this.currentEditItemId, data)
+    this.replaceOneItem(item)
+    message.success('Update successful')
+    this.createItemLoading = false
+    this.modalVisible = false
+    return item
   }
 
   @action replaceOneItem = async (item: any) => {

@@ -1,9 +1,9 @@
 
 import React from 'react'
 import {Button, Modal} from 'antd'
-import DataTable from '~/components/DataTable'
-import TableList from '~/components/TableList'
-import ItemForm from '~/components/ItemForm'
+import DataTable from './components/DataTable'
+import TableList from './components/TableList'
+import ItemForm from './components/ItemForm'
 import FlexView from 'react-flexview';
 
 function EntityTable(props: any) {
@@ -19,11 +19,16 @@ function EntityTable(props: any) {
             itemsLoading,
             columns,
             modalVisible,
-            showModal,
+            showCreateModal,
+            showUpdateModal,
             hideModal,
-            createEntityLoading,
-            createEntity,
-            replaceOneItem
+            createItemLoading,
+            createItem,
+            replaceOneItem,
+            modalTitle,
+            modalMode,
+            onSubmitForm,
+            currentEditItem
         }
     } = props
 
@@ -39,19 +44,21 @@ function EntityTable(props: any) {
             </FlexView>
             <FlexView column={true} grow>
                 <FlexView hAlignContent="right" height="64px">
-                    <Button type="primary" onClick={showModal}>Create</Button>
+                    <Button type="primary" onClick={showCreateModal}>Create</Button>
                 </FlexView>
                 <DataTable
+                    onClickEdit={showUpdateModal}
                     replaceOneItem={replaceOneItem}
                     entity={currentEntity}
                     items={items}
                     loading={itemsLoading}
                     columns={columns}
                     deleteItem={deleteItem}
+                    onSubmitForm={onSubmitForm}
                 />
             </FlexView>
             <Modal
-                title={`Create`}
+                title={modalTitle}
                 onCancel={hideModal}
                 visible={modalVisible}
                 width="60%"
@@ -59,10 +66,11 @@ function EntityTable(props: any) {
             >
                 <ItemForm
                     columns={columns}
-                    mode="create"
-                    loading={createEntityLoading}
-                    onSubmit={createEntity}
-                    okText="Create"
+                    mode={modalMode}
+                    item={currentEditItem}
+                    loading={createItemLoading}
+                    onSubmit={onSubmitForm}
+                    okText={modalTitle}
                 />
             </Modal>
         </FlexView>

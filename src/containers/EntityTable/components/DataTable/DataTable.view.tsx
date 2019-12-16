@@ -16,6 +16,8 @@ function DataTable(props: any) {
         loading,
         columns,
         deleteItem,
+        onClickEdit,
+        onSubmitForm
     } = props
 
     const columnsComp = columns.map((column: any) => {
@@ -47,6 +49,9 @@ function DataTable(props: any) {
                 const onSubmit = () => {
 
                 }
+                const handleOnClickEdit = () => {
+                    onClickEdit(item.id)
+                }
                 return (
                     <Action
                         deleteItem={deleteItem}
@@ -54,7 +59,8 @@ function DataTable(props: any) {
                         entity={entity}
                         item={item}
                         columns={columns}
-                        onSubmit={onSubmit}
+                        onSubmit={onSubmitForm}
+                        onClickEdit={handleOnClickEdit}
                     />
                 )
             }}

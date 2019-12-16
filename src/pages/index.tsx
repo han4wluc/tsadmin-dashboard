@@ -1,7 +1,7 @@
 import React from 'react'
 import { Layout } from 'antd';
 import EntityTable from '~/containers/EntityTable'
-import ItemFrom from '~/components/ItemForm'
+// import ItemFrom from '~/containers/EntityTable/components/ItemForm'
 
 import { useStaticRendering } from 'mobx-react'
 
