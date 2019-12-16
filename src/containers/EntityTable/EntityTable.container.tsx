@@ -1,13 +1,17 @@
 
 import React, { useCallback } from 'react'
-import {Button, Modal} from 'antd'
-import DataTable from './components/DataTable'
-import TableList from './components/TableList'
-import ItemForm from './components/ItemForm'
-import Action from './components/Action'
+import {Button, Modal, List} from 'antd'
 import FlexView from 'react-flexview';
 
-function EntityTable(props: any) {
+import {EntityTableStore} from './EntityTable.store'
+import DataTable from './components/DataTable'
+import EntityListItem from './components/EntityListItem'
+import ItemForm from './components/ItemForm'
+import Action from './components/Action'
+
+function EntityTable(props: {
+    store: EntityTableStore
+}) {
     const {
         store: s
     } = props
@@ -20,16 +24,27 @@ function EntityTable(props: any) {
                 onClickDelete={s.deleteItem}
             />
         )
-    }, [s.showUpdateModal, s.deleteItem])
+    }, [s])
+
+    const renderEntity = useCallback((entity: any) => {
+        const isSelected = s.selectedEntityId === entity.id
+        return (
+            <EntityListItem
+                entity={entity}
+                isSelected={isSelected}
+                selectEntityId={s.selectEntityId}
+            />
+        )
+    }, [s])
 
     return (
         <FlexView>
             <FlexView basis={200}>
-                <TableList
-                    entities={s.entities}
-                    selectEntityId={s.selectEntityId}
-                    selectedEntityId={s.selectedEntityId}
+                <List
+                    itemLayout="horizontal"
+                    dataSource={s.entities}
                     loading={s.entitiesLoading}
+                    renderItem={renderEntity}
                 />
             </FlexView>
             <FlexView column={true} grow>
