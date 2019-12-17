@@ -1,4 +1,3 @@
+import EntityListItem from './EntityListItem.view';
 
-import EntityListItem from './EntityListItem.view'
-
-export default EntityListItem
+export default EntityListItem;

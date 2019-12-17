@@ -1,18 +1,18 @@
+import React from 'react';
+import { ItemsTableStore } from './ItemsTable.store';
+import Action from './components/Action';
 
-
-import { ItemsTableStore } from './ItemsTable.store'
-import Action from './components/Action'
-
-export default (s: ItemsTableStore) => {
-    return {
-        renderAction: (_: any, item: any) => {
-            return (
-                <Action
-                    item={item}
-                    onClickEdit={s.showUpdateModal}
-                    onClickDelete={s.deleteItem}
-                />
-            )
-        }
-    }
-}
+export default (s: ItemsTableStore): object => {
+  return {
+    // eslint-disable-next-line
+    renderAction: (_: any, item: any): any => {
+      return (
+        <Action
+          item={item}
+          onClickEdit={s.showUpdateModal}
+          onClickDelete={s.deleteItem}
+        />
+      );
+    },
+  };
+};

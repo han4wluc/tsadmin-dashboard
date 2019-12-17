@@ -1,2 +1,1 @@
-
-export { default } from './Action.view'
+export { default } from './Action.view';

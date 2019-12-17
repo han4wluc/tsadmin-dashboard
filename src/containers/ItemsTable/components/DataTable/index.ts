@@ -1,2 +1,1 @@
-
-export { default } from './DataTable.view'
+export { default } from './DataTable.view';

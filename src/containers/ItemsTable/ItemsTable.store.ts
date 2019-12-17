@@ -1,167 +1,171 @@
-
-import { action, observable, computed } from 'mobx'
-import { message} from 'antd'
-import {EntityEventEmitter} from '~/services/emitters/entityEmitter'
-import {BaseStore, IStoreDependencies} from '~/utils/mobxConnect'
-import EntityService from '~/services/api/EntityService'
-import ResourceStore from '~/stores/ResourceStore'
-import ModalStore from '~/stores/ModalStore'
+import { action, observable, computed } from 'mobx';
+import { message } from 'antd';
+import { EntityEventEmitter } from '~/services/emitters/entityEmitter';
+import { BaseStore, IStoreDependencies } from '~/utils/mobxConnect';
+import EntityService from '~/services/api/EntityService';
+import ResourceStore from '~/stores/ResourceStore';
+import ModalStore from '~/stores/ModalStore';
 
 export type Entity = {
-    id: number,
-    label: string,
-    columns: any
-}
+  id: number;
+  label: string;
+  columns: any;
+};
 
 export interface IItemsTableDependencies extends IStoreDependencies {
-  entityService: EntityService,
-  entityEmitter: EntityEventEmitter
+  entityService: EntityService;
+  entityEmitter: EntityEventEmitter;
 }
 
 enum ModalMode {
   create = 'create',
-  update = 'update'
+  update = 'update',
 }
 
 export class ItemsTableStore extends BaseStore {
-
-  private entityService: EntityService
-  private itemsResource: ResourceStore<object>
-  private modalStore: ModalStore<any>
-  private entityEmitter: EntityEventEmitter
+  private entityService: EntityService;
+  private itemsResource: ResourceStore<object>;
+  private modalStore: ModalStore<any>;
+  private entityEmitter: EntityEventEmitter;
 
   constructor(protected dependencies: IItemsTableDependencies) {
-    super(dependencies)
-    this.entityService = dependencies.entityService
-    this.entityEmitter = dependencies.entityEmitter
-    this.itemsResource = new ResourceStore<object>([], (x: any) => x.id)
-    this.modalStore = new ModalStore<any>()
+    super(dependencies);
+    this.entityService = dependencies.entityService;
+    this.entityEmitter = dependencies.entityEmitter;
+    this.itemsResource = new ResourceStore<object>([], (x: any) => x.id);
+    this.modalStore = new ModalStore<any>();
   }
 
-  mount() {
-    const listerner = this.entityEmitter.addOnChooseEntityListerner((entity) => {
-        this.selectedEntity = entity
-        this.fetchData()
-    })
-    return listerner.remove
+  mount(): any {
+    const listerner = this.entityEmitter.addOnChooseEntityListerner(entity => {
+      this.selectedEntity = entity;
+      this.fetchData();
+    });
+    return listerner.remove;
   }
 
-  @observable entitiesLoading: boolean = true
-  @observable itemsLoading: boolean = true
-  @observable createItemLoading: boolean = false
-  @observable selectedEntity: any
+  @observable entitiesLoading: boolean = true;
+  @observable itemsLoading: boolean = true;
+  @observable createItemLoading: boolean = false;
+  @observable selectedEntity: any;
 
-  @computed get columns() {
+  @computed get columns(): any {
     if (!this.selectedEntity) {
-      return []
+      return [];
     }
-    return this.selectedEntity.columns
+    return this.selectedEntity.columns;
   }
 
-  @computed get currentEditItem() {
-    return this.items.filter((i: any) => i.id == this.currentEditItemId)[0]
+  @computed get currentEditItem(): any {
+    return this.items.filter((i: any) => i.id == this.currentEditItemId)[0];
   }
 
-  @computed get items() {
-    return this.itemsResource.items
+  @computed get items(): object[] {
+    return this.itemsResource.items;
   }
 
-  @computed get currentEditItemId() {
+  @computed get currentEditItemId(): any {
     if (!this.modalStore.payload) {
-      return undefined
+      return undefined;
     }
-    return this.modalStore.payload.itemId
+    return this.modalStore.payload.itemId;
   }
 
-  @computed get modalMode() {
+  @computed get modalMode(): any {
     if (!this.modalStore.payload) {
-      return ModalMode.create
+      return ModalMode.create;
     }
-    return this.modalStore.payload.mode
+    return this.modalStore.payload.mode;
   }
 
-  @computed get modalVisible() {
-    return this.modalStore.visible
+  @computed get modalVisible(): boolean {
+    return this.modalStore.visible;
   }
 
-  @computed get modalTitle() {
-    return this.modalMode === ModalMode.create ? 'Create' : 'Edit'
+  @computed get modalTitle(): string {
+    return this.modalMode === ModalMode.create ? 'Create' : 'Edit';
   }
 
-  @action fetchData = async () => {
+  @action fetchData = async (): Promise<void> => {
     if (!this.selectedEntity) {
-      return
+      return;
     }
-    this.itemsLoading = true
+    this.itemsLoading = true;
     try {
-      const items = (await this.entityService.fetchItems(this.selectedEntity.label))['items']
-      this.itemsResource.replace(items)
+      const items = (
+        await this.entityService.fetchItems(this.selectedEntity.label)
+      )['items'];
+      this.itemsResource.replace(items);
     } catch (error) {
-      message.error('network error')
+      message.error('network error');
     }
-    this.itemsLoading = false
-  }
+    this.itemsLoading = false;
+  };
 
-  @action createItem = async (data: any) => {
+  @action createItem = async (data: any): Promise<void> => {
     if (!this.selectedEntity) {
-      return
+      return;
     }
-    this.createItemLoading = true
-    await this.entityService.createItem(this.selectedEntity.label, data)
-    this.createItemLoading = false
-    this.hideModal()
-    message.success('Update successful')
-    this.fetchData()
-  }
+    this.createItemLoading = true;
+    await this.entityService.createItem(this.selectedEntity.label, data);
+    this.createItemLoading = false;
+    this.hideModal();
+    message.success('Update successful');
+    this.fetchData();
+  };
 
-  @action updateItem = async (data: any) => {
+  @action updateItem = async (data: any): Promise<void> => {
     if (!this.selectedEntity) {
-      return
+      return;
     }
-    this.createItemLoading = true
-    const item = await this.entityService.updateItem(this.selectedEntity.label, this.currentEditItemId, data)
-    this.itemsResource.append(item)
-    message.success('Update successful')
-    this.createItemLoading = false
-    this.hideModal()
-    return item
-  }
+    this.createItemLoading = true;
+    const item = await this.entityService.updateItem(
+      this.selectedEntity.label,
+      this.currentEditItemId,
+      data,
+    );
+    this.itemsResource.append(item);
+    message.success('Update successful');
+    this.createItemLoading = false;
+    this.hideModal();
+    return item;
+  };
 
-  @action deleteItem = async(id: any) => {
+  @action deleteItem = async (id: any): Promise<void> => {
     if (!this.selectedEntity) {
-      return
+      return;
     }
-    await this.entityService.deleteItem(this.selectedEntity.label, id)
-    message.success('Item deleted')
-    this.fetchData()
-  }
+    await this.entityService.deleteItem(this.selectedEntity.label, id);
+    message.success('Item deleted');
+    this.fetchData();
+  };
 
-  showCreateModal = () => {
+  showCreateModal = (): void => {
     this.modalStore.show({
       mode: ModalMode.create,
-      itemId: undefined
-    })
-  }
+      itemId: undefined,
+    });
+  };
 
-  onSubmitForm = (data: any) => {
+  onSubmitForm = (data: any): void => {
     if (this.modalMode === ModalMode.create) {
-      this.createItem(data)
-      return
+      this.createItem(data);
+      return;
     }
-    this.updateItem(data)
-  }
+    this.updateItem(data);
+  };
 
-  showUpdateModal = (itemId: string | number) => {
+  showUpdateModal = (itemId: string | number): void => {
     this.modalStore.show({
       mode: ModalMode.update,
-      itemId: itemId
-    })
-  }
+      itemId: itemId,
+    });
+  };
 
-  hideModal = () => {
+  hideModal = (): void => {
     this.modalStore.hide({
       mode: ModalMode.create,
-      itemId: undefined
-    })
-  }
+      itemId: undefined,
+    });
+  };
 }

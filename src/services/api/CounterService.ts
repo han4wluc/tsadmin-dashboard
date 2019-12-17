@@ -1,15 +1,7 @@
+class CounterService {}
 
-class CounterService {
+const counterService = new CounterService();
 
-}
+export { counterService };
 
-
-const counterService = new CounterService()
-
-export {
-    counterService
-}
-
-export default CounterService
-
-
+export default CounterService;
