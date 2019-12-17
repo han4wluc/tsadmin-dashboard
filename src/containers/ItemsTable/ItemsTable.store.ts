@@ -102,35 +102,6 @@ export class ItemsTableStore extends BaseStore {
     this.itemsLoading = false
   }
 
-  showCreateModal = () => {
-    this.modalStore.show({
-      mode: ModalMode.create,
-      itemId: undefined
-    })
-  }
-
-  onSubmitForm = (data: any) => {
-    if (this.modalMode === ModalMode.create) {
-      this.createItem(data)
-      return
-    }
-    this.updateItem(data)
-  }
-
-  showUpdateModal = (itemId: string | number) => {
-    this.modalStore.show({
-      mode: ModalMode.update,
-      itemId: itemId
-    })
-  }
-
-  hideModal = () => {
-    this.modalStore.hide({
-      mode: ModalMode.create,
-      itemId: undefined
-    })
-  }
-
   @action createItem = async (data: any) => {
     if (!this.selectedEntity) {
       return
@@ -163,5 +134,34 @@ export class ItemsTableStore extends BaseStore {
     await this.entityService.deleteItem(this.selectedEntity.label, id)
     message.success('Item deleted')
     this.fetchData()
+  }
+
+  showCreateModal = () => {
+    this.modalStore.show({
+      mode: ModalMode.create,
+      itemId: undefined
+    })
+  }
+
+  onSubmitForm = (data: any) => {
+    if (this.modalMode === ModalMode.create) {
+      this.createItem(data)
+      return
+    }
+    this.updateItem(data)
+  }
+
+  showUpdateModal = (itemId: string | number) => {
+    this.modalStore.show({
+      mode: ModalMode.update,
+      itemId: itemId
+    })
+  }
+
+  hideModal = () => {
+    this.modalStore.hide({
+      mode: ModalMode.create,
+      itemId: undefined
+    })
   }
 }
