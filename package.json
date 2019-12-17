@@ -11,6 +11,12 @@
     "test": "TS_NODE_PROJECT=tests/tsconfig.json mocha --opts tests/mocha.opts",
     "test:watch": "TS_NODE_PROJECT=tests/tsconfig.json mocha --opts tests/mocha.opts --watch"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint",
+      "pre-push": "yarn lint && yarn test"
+    }
+  },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.7.4",
     "@types/chai": "^4.2.6",
@@ -30,6 +36,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-react-hooks": "^2.3.0",
+    "husky": "^3.1.0",
     "mocha": "^6.2.2",
     "prettier": "^1.19.1",
     "react-test-renderer": "^16.12.0",
