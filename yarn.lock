@@ -922,6 +922,11 @@
   resolved "https://registry.npm.taobao.org/@types/chai/download/@types/chai-4.2.6.tgz?cache=0&sync_timestamp=1575343987972&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fchai%2Fdownload%2F%40types%2Fchai-4.2.6.tgz#a55625d151d9c7c7a0a95920632131d66480bce9"
   integrity sha1-pVYl0VHZx8egqVkgYyEx1mSAvOk=
 
+"@types/fbemitter@^2.0.32":
+  version "2.0.32"
+  resolved "https://registry.npm.taobao.org/@types/fbemitter/download/@types/fbemitter-2.0.32.tgz#8ed204da0f54e9c8eaec31b1eec91e25132d082c"
+  integrity sha1-jtIE2g9U6cjq7DGx7skeJRMtCCw=
+
 "@types/json5@^0.0.29":
   version "0.0.29"
   resolved "https://registry.npm.taobao.org/@types/json5/download/@types/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
@@ -2838,7 +2843,14 @@ fastparse@^1.1.1:
   resolved "https://registry.npm.taobao.org/fastparse/download/fastparse-1.1.2.tgz#91728c5a5942eced8531283c79441ee4122c35a9"
   integrity sha1-kXKMWllC7O2FMSg8eUQe5BIsNak=
 
-fbjs@^0.8.15, fbjs@^0.8.16, fbjs@^0.8.9:
+fbemitter@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.npm.taobao.org/fbemitter/download/fbemitter-2.1.1.tgz#523e14fdaf5248805bb02f62efc33be703f51865"
+  integrity sha1-Uj4U/a9SSIBbsC9i78M75wP1GGU=
+  dependencies:
+    fbjs "^0.8.4"
+
+fbjs@^0.8.15, fbjs@^0.8.16, fbjs@^0.8.4, fbjs@^0.8.9:
   version "0.8.17"
   resolved "https://registry.npm.taobao.org/fbjs/download/fbjs-0.8.17.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ffbjs%2Fdownload%2Ffbjs-0.8.17.tgz#c4d598ead6949112653d6588b01a5cdcd9f90fdd"
   integrity sha1-xNWY6taUkRJlPWWIsBpc3Nn5D90=

@@ -1,9 +1,12 @@
 import React from 'react'
+import { useStaticRendering } from 'mobx-react'
 import { Layout } from 'antd';
+import FlexView from 'react-flexview'
+
 import EntityTable from '~/containers/EntityTable'
+import ItemsTable from '~/containers/ItemsTable'
 // import ItemFrom from '~/containers/EntityTable/components/ItemForm'
 
-import { useStaticRendering } from 'mobx-react'
 
 
 const { Header, Footer, Content } = Layout
@@ -33,8 +36,11 @@ export default class Counter extends React.Component<any, any> {
         <Layout>
           <Header>Header</Header>
             <Content style={{minHeight: '800px', backgroundColor: 'white', padding: '24px'}}>
-              <EntityTable />
-              {/* <ItemFrom/> */}
+              <FlexView>
+                <EntityTable />
+                <ItemsTable />
+              </FlexView>
+             {/* <ItemFrom/> */}
             </Content>
             <Footer>
               Footer

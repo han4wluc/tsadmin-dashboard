@@ -3,13 +3,13 @@ import {entityService} from '~/services/api/EntityService'
 import { connect } from '~/utils/mobxConnect'
 import entityEmitter from '~/services/emitters/entityEmitter'
 
-import { EntityTableStore, IEntityTableDependencies } from './EntityTable.store'
-import EntityTable from './EntityTable.container'
-import renderFunctions from './EntityTable.render'
+import { ItemsTableStore, IItemsTableDependencies } from './ItemsTable.store'
+import EntityTable from './ItemsTable.container'
+import renderFunctions from './ItemsTable.render'
 
-export default connect<IEntityTableDependencies>({
+export default connect<IItemsTableDependencies>({
     isGlobal: false,
-    Store: EntityTableStore,
+    Store: ItemsTableStore,
     dependencies: {
         entityService,
         entityEmitter

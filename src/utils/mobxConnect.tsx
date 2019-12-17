@@ -20,10 +20,7 @@ function connect<T>({
             const OElement: any = observer(Element)
             const [store] = useState(isGlobal ? Store.getInstance(dependencies) : new Store(dependencies))
             useEffect(() => {
-                store.mount()
-                return () => {
-                    store.unmount()
-                }
+                return store.mount()
             }, [store])
             const renderFunctionProps = useMemo(() => {
                 return renderFunctions(store)
@@ -53,8 +50,6 @@ class BaseStore {
     }
 
     mount() {}
-  
-    unmount() {}
 }
 
 export {
