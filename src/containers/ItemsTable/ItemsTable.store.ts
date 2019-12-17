@@ -40,7 +40,7 @@ export class ItemsTableStore extends BaseStore {
 
   mount() {
     const listerner = this.entityEmitter.addOnChooseEntityListerner((entity) => {
-        this.currentEntity = entity
+        this.selectedEntity = entity
         this.fetchData()
     })
     return listerner.remove
@@ -49,13 +49,13 @@ export class ItemsTableStore extends BaseStore {
   @observable entitiesLoading: boolean = true
   @observable itemsLoading: boolean = true
   @observable createItemLoading: boolean = false
-  @observable currentEntity: any
+  @observable selectedEntity: any
 
   @computed get columns() {
-    if (!this.currentEntity) {
+    if (!this.selectedEntity) {
       return []
     }
-    return this.currentEntity.columns
+    return this.selectedEntity.columns
   }
 
   @computed get currentEditItem() {
@@ -89,12 +89,12 @@ export class ItemsTableStore extends BaseStore {
   }
 
   @action fetchData = async () => {
-    if (!this.currentEntity) {
+    if (!this.selectedEntity) {
       return
     }
     this.itemsLoading = true
     try {
-      const items = (await this.entityService.fetchItems(this.currentEntity.label))['items']
+      const items = (await this.entityService.fetchItems(this.selectedEntity.label))['items']
       this.itemsResource.replace(items)
     } catch (error) {
       message.error('network error')
@@ -132,11 +132,11 @@ export class ItemsTableStore extends BaseStore {
   }
 
   @action createItem = async (data: any) => {
-    if (!this.currentEntity) {
+    if (!this.selectedEntity) {
       return
     }
     this.createItemLoading = true
-    await this.entityService.createItem(this.currentEntity.label, data)
+    await this.entityService.createItem(this.selectedEntity.label, data)
     this.createItemLoading = false
     this.hideModal()
     message.success('Update successful')
@@ -144,11 +144,11 @@ export class ItemsTableStore extends BaseStore {
   }
 
   @action updateItem = async (data: any) => {
-    if (!this.currentEntity) {
+    if (!this.selectedEntity) {
       return
     }
     this.createItemLoading = true
-    const item = await this.entityService.updateItem(this.currentEntity.label, this.currentEditItemId, data)
+    const item = await this.entityService.updateItem(this.selectedEntity.label, this.currentEditItemId, data)
     this.itemsResource.append(item)
     message.success('Update successful')
     this.createItemLoading = false
@@ -157,10 +157,10 @@ export class ItemsTableStore extends BaseStore {
   }
 
   @action deleteItem = async(id: any) => {
-    if (!this.currentEntity) {
+    if (!this.selectedEntity) {
       return
     }
-    await this.entityService.deleteItem(this.currentEntity.label, id)
+    await this.entityService.deleteItem(this.selectedEntity.label, id)
     message.success('Item deleted')
     this.fetchData()
   }

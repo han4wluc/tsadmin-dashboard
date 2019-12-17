@@ -40,17 +40,22 @@ export class EntityTableStore extends BaseStore {
     return this.entitiesResource.items
   }
 
-  @computed get currentEntity() {
+  @computed get selectedEntity() {
     return this.entitiesResource.selectedItem
   }
 
   @action fetchEntities = async () => {
     this.entitiesLoading = true
-    const entities = (await this.entityService.fetchEntities())['entities']
-    this.entitiesResource.replace(entities)
+    try {
+      const entities = (await this.entityService.fetchEntities())['entities']
+      this.entitiesResource.replace(entities)
+      this.entitiesResource.setSelectedId(entities[0].id)
+      this.entityEmitter.emitOnChooseEntity(this.selectedEntity)
+    } catch (error) {
+      console.warn(error)
+    }
     this.entitiesLoading = false
-    this.entitiesResource.setSelectedId(entities[0].id)
-    this.entityEmitter.emitOnChooseEntity(this.currentEntity)
+
  }
 
   @action selectEntityId = (entityId: number) => {
