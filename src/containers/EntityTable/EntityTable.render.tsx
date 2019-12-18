@@ -4,7 +4,7 @@ import EntityListItem from './components/EntityListItem';
 
 export default (s: EntityTableStore): any => {
   return {
-    // eslint-disable-next-line
+    // eslint-disable-next-line react/display-name
     renderEntity: (entity: any): any => {
       const isSelected =
         !!s.selectedEntity && s.selectedEntity.id === entity.id;
