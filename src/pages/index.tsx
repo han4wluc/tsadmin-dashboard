@@ -28,7 +28,6 @@ export default class Counter extends React.Component<any, any> {
             <EntityTable />
             <ItemsTable />
           </FlexView>
-          {/* <ItemFrom/> */}
         </Content>
         <Footer>Footer</Footer>
       </Layout>

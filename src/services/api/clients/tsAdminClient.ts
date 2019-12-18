@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+import { TS_ADMIN_API_ENDPOINT } from '~/constants';
+
 const client = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: TS_ADMIN_API_ENDPOINT,
 });
 
 client.interceptors.response.use(
