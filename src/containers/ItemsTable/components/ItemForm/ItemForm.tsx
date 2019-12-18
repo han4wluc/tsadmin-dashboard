@@ -1,19 +1,54 @@
 import React from 'react';
+import moment from 'moment';
+import { Tooltip, Icon } from 'antd';
 import {
   Form,
   Input,
-  Button,
-  Tooltip,
-  Icon,
-  Select,
-  DatePicker,
   InputNumber,
-} from 'antd';
-import moment from 'moment';
+  Checkbox,
+  SubmitButton,
+  DatePicker,
+  Select,
+} from 'formik-antd';
+import { Formik } from 'formik';
 
 const { TextArea } = Input;
 
-const { Option } = Select;
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 8 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 16 },
+  },
+};
+
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+    },
+    sm: {
+      span: 16,
+      offset: 8,
+    },
+  },
+};
+
+function Label(props: any): any {
+  const { label } = props;
+  return (
+    <span>
+      <span style={{ marginRight: 4 }}>{label}</span>
+      <Tooltip title={label}>
+        <Icon type="question-circle-o" />
+      </Tooltip>
+    </span>
+  );
+}
 
 function getIfDisabled(
   mode: string,
@@ -34,29 +69,96 @@ function getIfDisabled(
   return disabled;
 }
 
-function RegistrationForm(props: any): any {
-  const { getFieldDecorator } = props.form;
-  const { columns, item = {}, mode, loading, onSubmit, okText } = props;
+function getDefaultValue(mode: string, create: any, update: any): any {
+  if (mode === 'create') {
+    if (create && create.default !== undefined) {
+      return create.default;
+    }
+  }
+  if (mode === 'update') {
+    if (update && update.default !== undefined) {
+      return update.default;
+    }
+  }
+  return undefined;
+}
 
-  const handleSubmit = (e: any): any => {
-    e.preventDefault();
-    props.form.validateFieldsAndScroll((err: any, values: any) => {
-      if (err) {
-        return;
-      }
-      const finalValues: any = {};
+function createFilterColumnsFunction(mode: string) {
+  return (column: any): boolean => {
+    if (mode === 'create') {
+      return column.create && column.create.display === true;
+    }
+    if (mode === 'update') {
+      return column.update && column.update.display === true;
+    }
+    return true;
+  };
+}
 
-      columns
-        .filter((column: any) => {
-          if (mode === 'create') {
-            return column.create && column.create.display === true;
-          }
-          if (mode === 'update') {
-            return column.update && column.update.display === true;
-          }
-          return true;
-        })
-        .forEach((column: any) => {
+function TypeInput(props: any): any {
+  const { type, enums, ...otherProps } = props;
+
+  if (type === 'enum') {
+    const options = enums.map((e: string) => {
+      return (
+        <Select.Option key={e} value={e}>
+          {e}
+        </Select.Option>
+      );
+    });
+    return <Select {...otherProps}>{options}</Select>;
+  }
+
+  if (type === 'number') {
+    return <InputNumber style={{ width: 300 }} {...otherProps} />;
+  }
+
+  if (type === 'boolean') {
+    return <Checkbox {...otherProps} />;
+  }
+
+  if (type === 'date') {
+    return (
+      <DatePicker
+        {...otherProps}
+        defaultValue={moment(otherProps.defaultValue)}
+      />
+    );
+  }
+
+  if (type === 'datetime') {
+    return (
+      <DatePicker
+        {...otherProps}
+        defaultValue={moment(otherProps.defaultValue)}
+      />
+    );
+  }
+
+  if (type === 'text') {
+    return <TextArea {...otherProps} />;
+  }
+
+  if (type === 'json') {
+    const defaultValue = otherProps.defaultValue
+      ? JSON.stringify(otherProps.defaultValue, null, 2)
+      : undefined;
+    return <TextArea {...otherProps} defaultValue={defaultValue} />;
+  }
+
+  return <Input {...otherProps} />;
+}
+
+function ItemFormik(props: any): any {
+  const { item = {}, onSubmit, mode, columns = [], loading, okText } = props;
+  const filterColumns = createFilterColumnsFunction(mode);
+  return (
+    <Formik
+      initialValues={item}
+      onSubmit={(values): any => {
+        const finalValues: any = {};
+
+        columns.filter(filterColumns).forEach((column: any) => {
           const { label, type, create, update } = column;
           const disabled = getIfDisabled(mode, loading, create, update);
           if (disabled === true) {
@@ -79,147 +181,46 @@ function RegistrationForm(props: any): any {
           }
         });
 
-      console.log('Received values of form: ', finalValues);
-      onSubmit && onSubmit(finalValues);
-    });
-  };
+        console.log('Received values of form: ', finalValues);
+        onSubmit && onSubmit(finalValues);
+      }}
+    >
+      {(): any => {
+        const formItemsComp = columns
+          .filter(filterColumns)
+          .map((column: any) => {
+            const { label, type, create, update } = column;
+            const disabled = getIfDisabled(mode, loading, create, update);
+            const defaultValue = getDefaultValue(mode, create, update);
+            return (
+              <Form.Item
+                key={label}
+                name={label}
+                label={<Label label={label} />}
+              >
+                <TypeInput
+                  name={label}
+                  type={type}
+                  disabled={disabled}
+                  defaultValue={defaultValue}
+                />
+              </Form.Item>
+            );
+          });
 
-  const formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 8 },
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 16 },
-    },
-  };
-  const tailFormItemLayout = {
-    wrapperCol: {
-      xs: {
-        span: 24,
-        offset: 0,
-      },
-      sm: {
-        span: 16,
-        offset: 8,
-      },
-    },
-  };
-
-  const formsComp = columns
-    .filter((column: any) => {
-      if (mode === 'create') {
-        return column.create && column.create.display === true;
-      }
-      if (mode === 'update') {
-        return column.update && column.update.display === true;
-      }
-      return true;
-    })
-    .map((column: any) => {
-      const {
-        label,
-        type,
-        enum: enums,
-        required,
-        create = {},
-        update = {},
-      } = column;
-      const rules: any = [];
-      if (required) {
-        rules.push({
-          required: true,
-          message: 'Field is required',
-        });
-      }
-
-      const disabled = getIfDisabled(mode, loading, create, update);
-
-      let comp = <Input disabled={disabled} />;
-      let initialValue = item[label];
-
-      if (
-        mode === 'create' &&
-        initialValue === undefined &&
-        create.default !== undefined
-      ) {
-        initialValue = create.default;
-      }
-
-      if (type === 'enum') {
-        const options = enums.map((e: string) => {
-          return (
-            <Option key={e} value={e}>
-              {e}
-            </Option>
-          );
-        });
-        comp = <Select disabled={disabled}>{options}</Select>;
-      }
-      if (type === 'number') {
-        comp = <InputNumber disabled={disabled} style={{ width: 300 }} />;
-      }
-      if (type === 'datetime') {
-        comp = (
-          <DatePicker
-            disabled={disabled}
-            showTime
-            placeholder="Select Date and Time"
-          />
+        return (
+          <Form layout="vertical" {...formItemLayout}>
+            {formItemsComp}
+            <Form.Item name="_" {...tailFormItemLayout}>
+              <SubmitButton loading={false} disabled={false}>
+                {okText}
+              </SubmitButton>
+            </Form.Item>
+          </Form>
         );
-        if (item[label]) {
-          initialValue = moment(initialValue);
-        }
-      }
-      if (type === 'date') {
-        comp = <DatePicker disabled={disabled} placeholder="Select Date" />;
-        if (item[label]) {
-          initialValue = moment(initialValue);
-        }
-      }
-      if (type === 'text') {
-        comp = <TextArea disabled={disabled} />;
-      }
-
-      // TODO custom json component
-      if (type === 'json') {
-        comp = <TextArea disabled={disabled} />;
-        initialValue = JSON.stringify(initialValue, null, 2);
-      }
-
-      return (
-        <Form.Item
-          key={label}
-          label={
-            <span>
-              {/* <Tag>{type}</Tag> */}
-              <span style={{ marginRight: 4 }}>{label}</span>
-              <Tooltip title={label}>
-                <Icon type="question-circle-o" />
-              </Tooltip>
-              {/* <span style={{marginRight: 4}}>{label}</span> */}
-            </span>
-          }
-        >
-          {getFieldDecorator(label, {
-            initialValue,
-            rules,
-          })(comp)}
-        </Form.Item>
-      );
-    });
-
-  return (
-    <Form {...formItemLayout} onSubmit={handleSubmit}>
-      {formsComp}
-      <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" htmlType="submit" loading={loading}>
-          {okText}
-        </Button>
-      </Form.Item>
-    </Form>
+      }}
+    </Formik>
   );
 }
 
-export default Form.create<any>({ name: 'register' })(RegistrationForm);
+export default ItemFormik;

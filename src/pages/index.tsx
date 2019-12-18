@@ -6,6 +6,8 @@ import FlexView from 'react-flexview';
 import EntityTable from '~/containers/EntityTable';
 import ItemsTable from '~/containers/ItemsTable';
 
+import 'antd/dist/antd.css';
+
 const { Header, Footer, Content } = Layout;
 
 const isServer = typeof window === 'undefined';
