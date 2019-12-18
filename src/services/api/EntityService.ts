@@ -1,43 +1,47 @@
-import axios from 'axios';
+import { AxiosInstance } from 'axios';
+import tsAdminClient from './clients/tsAdminClient';
 
 class EntityService {
+  private httpClient: AxiosInstance;
+
+  constructor(httpClient: AxiosInstance) {
+    this.httpClient = httpClient;
+  }
+
+  setAuthToken = (token: string): void => {
+    this.httpClient.defaults.headers['Authorization'] = `Bearer ${token}`;
+  };
+
   createItem = async (entityName: string, data: any): Promise<any> => {
-    const res = await axios.post<any, any>(
-      `http://localhost:8000/${entityName}`,
-      data,
-    );
+    const res = await this.httpClient.post<any, any>(`${entityName}`, data);
     return res.data;
   };
 
   updateItem = async (entityName: string, id: any, data: any): Promise<any> => {
-    const res = await axios.patch<any, any>(
-      `http://localhost:8000/${entityName}/${id}`,
+    const res = await this.httpClient.patch<any, any>(
+      `${entityName}/${id}`,
       data,
     );
     return res.data;
   };
 
   fetchEntities = async (): Promise<any> => {
-    const reps = await axios.get<any, any>('http://localhost:8000/entities');
+    const reps = await this.httpClient.get<any, any>('entities');
     return reps.data;
   };
 
   fetchItems = async (entityName: string): Promise<any> => {
-    const reps = await axios.get<any, any>(
-      `http://localhost:8000/${entityName}`,
-    );
+    const reps = await this.httpClient.get<any, any>(`${entityName}`);
     return reps.data;
   };
 
   deleteItem = async (entityName: string, id: any): Promise<any> => {
-    const res = await axios.delete<any, any>(
-      `http://localhost:8000/${entityName}/${id}`,
-    );
+    const res = await this.httpClient.delete<any, any>(`${entityName}/${id}`);
     return res.data;
   };
 }
 
-const entityService = new EntityService();
+const entityService = new EntityService(tsAdminClient);
 
 export { entityService };
 
