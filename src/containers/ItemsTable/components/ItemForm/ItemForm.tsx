@@ -96,25 +96,33 @@ function createFilterColumnsFunction(mode: string) {
 }
 
 function TypeInput(props: any): any {
-  const { type, enums, ...otherProps } = props;
+  const { type, options = {}, ...otherProps } = props;
 
   if (type === 'enum') {
-    const options = enums.map((e: string) => {
-      return (
-        <Select.Option key={e} value={e}>
-          {e}
-        </Select.Option>
-      );
-    });
-    return <Select {...otherProps}>{options}</Select>;
+    const { enumObject } = options;
+    const optionsComp = Object.keys(enumObject).map(
+      (label: string, i: number) => {
+        const value = enumObject[label];
+        return (
+          <Select.Option key={i} value={value}>
+            {label}
+          </Select.Option>
+        );
+      },
+    );
+    // FIXME defaultValue not working
+    return <Select {...otherProps}>{optionsComp}</Select>;
   }
 
   if (type === 'number') {
-    return <InputNumber style={{ width: 300 }} {...otherProps} />;
+    const { max, min } = options;
+    return (
+      <InputNumber {...otherProps} max={max} min={min} style={{ width: 300 }} />
+    );
   }
 
   if (type === 'boolean') {
-    return <Checkbox {...otherProps} />;
+    return <Checkbox checked={otherProps.defaultValue} {...otherProps} />;
   }
 
   if (type === 'date') {
@@ -130,6 +138,7 @@ function TypeInput(props: any): any {
     return (
       <DatePicker
         {...otherProps}
+        showTime={true}
         defaultValue={moment(otherProps.defaultValue)}
       />
     );
@@ -140,10 +149,11 @@ function TypeInput(props: any): any {
   }
 
   if (type === 'json') {
+    const { rows } = options;
     const defaultValue = otherProps.defaultValue
       ? JSON.stringify(otherProps.defaultValue, null, 2)
       : undefined;
-    return <TextArea {...otherProps} defaultValue={defaultValue} />;
+    return <TextArea rows={rows} {...otherProps} defaultValue={defaultValue} />;
   }
 
   return <Input {...otherProps} />;
@@ -152,56 +162,70 @@ function TypeInput(props: any): any {
 function ItemFormik(props: any): any {
   const { item = {}, onSubmit, mode, columns = [], loading, okText } = props;
   const filterColumns = createFilterColumnsFunction(mode);
+
+  const initialValues = {
+    ...item,
+  };
+
+  columns.filter(filterColumns).forEach((column: any) => {
+    const { id, type, create, update } = column;
+    const disabled = getIfDisabled(mode, loading, create, update);
+    if (disabled === true) {
+      return;
+    }
+    if (type === 'json') {
+      initialValues[id] = JSON.stringify(initialValues[id], null, 2);
+    }
+    if (type === 'enum') {
+      const defaultValue = getDefaultValue(mode, create, update);
+      if (defaultValue) {
+        initialValues[id] = defaultValue;
+      }
+    }
+  });
+
+  const _onSubmit = (values: any): any => {
+    const finalValues: any = {};
+
+    columns.filter(filterColumns).forEach((column: any) => {
+      const { id, type, create, update } = column;
+      const disabled = getIfDisabled(mode, loading, create, update);
+      if (disabled === true) {
+        return;
+      }
+      if (type === 'date') {
+        finalValues[id] = values[id]
+          ? moment(values[id]).format('YYYY-MM-DD')
+          : undefined;
+      } else if (type === 'datetime') {
+        finalValues[id] = values[id] ? JSON.stringify(values[id]) : undefined;
+      } else if (type === 'json') {
+        finalValues[id] = values[id] ? JSON.parse(values[id]) : undefined;
+      } else {
+        finalValues[id] = values[id];
+      }
+    });
+
+    console.log('Received values of form: ', finalValues);
+    onSubmit && onSubmit(finalValues);
+  };
+
   return (
-    <Formik
-      initialValues={item}
-      onSubmit={(values): any => {
-        const finalValues: any = {};
-
-        columns.filter(filterColumns).forEach((column: any) => {
-          const { label, type, create, update } = column;
-          const disabled = getIfDisabled(mode, loading, create, update);
-          if (disabled === true) {
-            return;
-          }
-          if (type === 'date') {
-            finalValues[label] = values[label]
-              ? values[label].format('YYYY-MM-DD')
-              : undefined;
-          } else if (type === 'datetime') {
-            finalValues[label] = values[label]
-              ? JSON.stringify(values[label])
-              : undefined;
-          } else if (type === 'json') {
-            finalValues[label] = values[label]
-              ? JSON.parse(values[label])
-              : undefined;
-          } else {
-            finalValues[label] = values[label];
-          }
-        });
-
-        console.log('Received values of form: ', finalValues);
-        onSubmit && onSubmit(finalValues);
-      }}
-    >
+    <Formik initialValues={initialValues} onSubmit={_onSubmit}>
       {(): any => {
         const formItemsComp = columns
           .filter(filterColumns)
           .map((column: any) => {
-            const { label, type, create, update } = column;
+            const { id, label, type, create, update, options } = column;
             const disabled = getIfDisabled(mode, loading, create, update);
             const defaultValue = getDefaultValue(mode, create, update);
             return (
-              <Form.Item
-                key={label}
-                name={label}
-                label={<Label label={label} />}
-              >
+              <Form.Item key={id} name={id} label={<Label label={label} />}>
                 <TypeInput
-                  name={label}
+                  name={id}
                   type={type}
                   disabled={disabled}
+                  options={options}
                   defaultValue={defaultValue}
                 />
               </Form.Item>
