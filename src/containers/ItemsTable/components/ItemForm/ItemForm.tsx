@@ -122,7 +122,9 @@ function TypeInput(props: any): any {
   }
 
   if (type === 'boolean') {
-    return <Checkbox checked={otherProps.defaultValue} {...otherProps} />;
+    return (
+      <Checkbox defaultChecked={otherProps.defaultValue} {...otherProps} />
+    );
   }
 
   if (type === 'date') {

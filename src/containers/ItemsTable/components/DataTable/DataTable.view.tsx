@@ -5,7 +5,7 @@ import FlexView from 'react-flexview';
 const { Column } = Table;
 
 function DataTable(props: any): any {
-  const { items, loading, columns, renderAction } = props;
+  const { items, loading, columns, renderAction, pageInfo, fetchData } = props;
 
   const columnsComp = columns.map((column: any) => {
     const { id, label, type, options } = column;
@@ -69,6 +69,12 @@ function DataTable(props: any): any {
         loading={loading}
         size="small"
         bordered={true}
+        pagination={{
+          onChange: (pageNum: number): any => {
+            fetchData(pageNum);
+          },
+          ...pageInfo,
+        }}
       >
         {columnsComp}
       </Table>

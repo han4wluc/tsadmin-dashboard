@@ -22,6 +22,12 @@ enum ModalMode {
   update = 'update',
 }
 
+type Page = {
+  num: number;
+  size: number;
+  total: number;
+};
+
 export class ItemsTableStore extends BaseStore {
   private entityService: EntityService;
   private itemsResource: ResourceStore<object>;
@@ -48,6 +54,20 @@ export class ItemsTableStore extends BaseStore {
   @observable itemsLoading: boolean = true;
   @observable createItemLoading: boolean = false;
   @observable selectedEntity: any;
+  @observable page: Page = {
+    num: 1,
+    size: 20,
+    total: 0,
+  };
+
+  @computed get pageInfo(): any {
+    const page = this.page;
+    return {
+      current: page.num,
+      pageSize: page.size,
+      total: page.total,
+    };
+  }
 
   @computed get columns(): any {
     if (!this.selectedEntity) {
@@ -86,16 +106,23 @@ export class ItemsTableStore extends BaseStore {
     return this.modalMode === ModalMode.create ? 'Create' : 'Edit';
   }
 
-  @action fetchData = async (): Promise<void> => {
+  @action fetchData = async (pageNum: number = 1): Promise<void> => {
     if (!this.selectedEntity) {
       return;
     }
     this.itemsLoading = true;
     try {
-      const items = (
-        await this.entityService.fetchItems(this.selectedEntity.label)
-      )['items'];
+      const { items, page } = await this.entityService.fetchItems(
+        this.selectedEntity.label,
+        {
+          params: {
+            pageNum,
+            pageSize: this.page.size,
+          },
+        },
+      );
       this.itemsResource.replace(items);
+      this.page = page;
     } catch (error) {
       message.error('network error');
     }

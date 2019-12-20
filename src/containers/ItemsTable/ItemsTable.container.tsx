@@ -27,6 +27,8 @@ function ItemsTable(props: {
           columns={s.columns}
           deleteItem={s.deleteItem}
           renderAction={renderAction}
+          pageInfo={s.pageInfo}
+          fetchData={s.fetchData}
         />
       </FlexView>
       <Modal

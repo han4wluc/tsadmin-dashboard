@@ -30,8 +30,8 @@ class EntityService {
     return reps.data;
   };
 
-  fetchItems = async (entityName: string): Promise<any> => {
-    const reps = await this.httpClient.get<any, any>(`${entityName}`);
+  fetchItems = async (entityName: string, config: any): Promise<any> => {
+    const reps = await this.httpClient.get<any, any>(`${entityName}`, config);
     return reps.data;
   };
 
