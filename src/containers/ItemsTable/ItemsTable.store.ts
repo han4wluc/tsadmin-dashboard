@@ -33,6 +33,8 @@ export class ItemsTableStore extends BaseStore {
   private itemsResource: ResourceStore<object>;
   private modalStore: ModalStore<any>;
   private entityEmitter: EntityEventEmitter;
+  private currentFilterString?: string;
+  private currentSortString?: string;
 
   constructor(protected dependencies: IItemsTableDependencies) {
     super(dependencies);
@@ -59,6 +61,8 @@ export class ItemsTableStore extends BaseStore {
     size: 20,
     total: 0,
   };
+  @observable filterString?: string;
+  @observable sortString?: string;
 
   @computed get pageInfo(): any {
     const page = this.page;
@@ -106,6 +110,20 @@ export class ItemsTableStore extends BaseStore {
     return this.modalMode === ModalMode.create ? 'Create' : 'Edit';
   }
 
+  @action setFilterString = (filterString: string): void => {
+    this.filterString = filterString;
+  };
+
+  @action setSortString = (sortString: string): void => {
+    this.sortString = sortString;
+  };
+
+  doSearch = () => {
+    this.currentFilterString = this.filterString;
+    this.currentSortString = this.sortString;
+    this.fetchData();
+  };
+
   @action fetchData = async (pageNum: number = 1): Promise<void> => {
     if (!this.selectedEntity) {
       return;
@@ -118,6 +136,8 @@ export class ItemsTableStore extends BaseStore {
           params: {
             pageNum,
             pageSize: this.page.size,
+            filter: this.currentFilterString,
+            sort: this.currentSortString,
           },
         },
       );
