@@ -13,15 +13,16 @@ class EntityService {
   };
 
   createItem = async (entityName: string, data: any): Promise<any> => {
-    const res = await this.httpClient.post<any, any>(`${entityName}`, data);
+    const res = await this.httpClient.post<any, any>(`${entityName}`, {
+      data,
+    });
     return res.data;
   };
 
   updateItem = async (entityName: string, id: any, data: any): Promise<any> => {
-    const res = await this.httpClient.patch<any, any>(
-      `${entityName}/${id}`,
+    const res = await this.httpClient.patch<any, any>(`${entityName}/${id}`, {
       data,
-    );
+    });
     return res.data;
   };
 
