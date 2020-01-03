@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "next ./src",
-    "build": "next build ./src",
+    "build": "next build ./src && next export ./src -o build",
     "start": "next start ./src",
     "lint": "eslint src --ext ts --ext tsx",
     "test": "TS_NODE_PROJECT=tests/tsconfig.json mocha --opts tests/mocha.opts",
