@@ -1,6 +1,6 @@
 {
-  "name": "next-ts",
-  "version": "1.0.0",
+  "name": "tsadmin-client",
+  "version": "0.1.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
