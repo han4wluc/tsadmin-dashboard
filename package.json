@@ -9,7 +9,9 @@
     "start": "next start ./src",
     "lint": "eslint src --ext ts --ext tsx",
     "test": "TS_NODE_PROJECT=tests/tsconfig.json mocha --opts tests/mocha.opts",
-    "test:watch": "TS_NODE_PROJECT=tests/tsconfig.json mocha --opts tests/mocha.opts --watch"
+    "test:watch": "TS_NODE_PROJECT=tests/tsconfig.json mocha --opts tests/mocha.opts --watch",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "husky": {
     "hooks": {
@@ -18,7 +20,13 @@
     }
   },
   "devDependencies": {
+    "@babel/core": "^7.7.7",
     "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@storybook/addon-actions": "^5.2.8",
+    "@storybook/addon-links": "^5.2.8",
+    "@storybook/addons": "^5.2.8",
+    "@storybook/preset-typescript": "^1.1.0",
+    "@storybook/react": "^5.2.8",
     "@types/chai": "^4.2.6",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.14",
@@ -29,6 +37,8 @@
     "@types/styled-jsx": "^2.2.8",
     "@typescript-eslint/eslint-plugin": "^2.12.0",
     "@typescript-eslint/parser": "^2.12.0",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-loader": "^8.0.6",
     "babel-plugin-import": "^1.13.0",
     "chai": "^4.2.0",
     "eslint": "^6.7.2",
@@ -39,8 +49,10 @@
     "husky": "^3.1.0",
     "mocha": "^6.2.2",
     "prettier": "^1.19.1",
+    "react-docgen-typescript-loader": "^3.6.0",
     "react-test-renderer": "^16.12.0",
     "sinon": "^7.5.0",
+    "ts-loader": "^6.2.1",
     "ts-node": "^8.5.4",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.7.2"

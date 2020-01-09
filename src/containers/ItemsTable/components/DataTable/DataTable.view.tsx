@@ -51,15 +51,18 @@ function DataTable(props: any): any {
       />
     );
   });
-  columnsComp.push(
-    <Column
-      key="actions"
-      title="actions"
-      dataIndex="actions"
-      width={100}
-      render={renderAction}
-    />,
-  );
+
+  if (!loading) {
+    columnsComp.push(
+      <Column
+        key="actions"
+        title="actions"
+        dataIndex="actions"
+        width={100}
+        render={renderAction}
+      />,
+    );
+  }
 
   return (
     <div>
@@ -78,7 +81,6 @@ function DataTable(props: any): any {
       >
         {columnsComp}
       </Table>
-      <style jsx>{``}</style>
     </div>
   );
 }

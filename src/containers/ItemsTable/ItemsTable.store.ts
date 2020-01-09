@@ -28,13 +28,36 @@ type Page = {
   total: number;
 };
 
-export class ItemsTableStore extends BaseStore {
+export interface IItemsTableStore {
+  showUpdateModal: (itemId: string | number) => void;
+  deleteItem: (id: any) => Promise<void>;
+  sortString?: any[];
+  setSortString: (sortString: any) => void;
+  filterString?: any[];
+  setFilterString: (filterString: any) => void;
+  doSearch: () => void;
+  showCreateModal: () => void;
+  items: any[];
+  itemsLoading: boolean;
+  columns: any[];
+  pageInfo: Page;
+  fetchData: (pageNum: number) => Promise<void>;
+  modalTitle: string;
+  hideModal: () => void;
+  modalVisible: boolean;
+  modalMode: string;
+  currentEditItem: any;
+  createItemLoading: boolean;
+  onSubmitForm: (data: any) => void;
+}
+
+export class ItemsTableStore extends BaseStore implements IItemsTableStore {
   private entityService: EntityService;
   private itemsResource: ResourceStore<object>;
   private modalStore: ModalStore<any>;
   private entityEmitter: EntityEventEmitter;
-  private currentFilterString?: string;
-  private currentSortString?: string;
+  private currentFilterString?: any;
+  private currentSortString?: any;
 
   constructor(protected dependencies: IItemsTableDependencies) {
     super(dependencies);
@@ -61,8 +84,8 @@ export class ItemsTableStore extends BaseStore {
     size: 20,
     total: 0,
   };
-  @observable filterString?: string;
-  @observable sortString?: string;
+  @observable filterString?: any[];
+  @observable sortString?: any[];
 
   @computed get pageInfo(): any {
     const page = this.page;
@@ -110,11 +133,11 @@ export class ItemsTableStore extends BaseStore {
     return this.modalMode === ModalMode.create ? 'Create' : 'Edit';
   }
 
-  @action setFilterString = (filterString: string): void => {
+  @action setFilterString = (filterString: any): void => {
     this.filterString = filterString;
   };
 
-  @action setSortString = (sortString: string): void => {
+  @action setSortString = (sortString: any): void => {
     this.sortString = sortString;
   };
 

@@ -4,7 +4,7 @@ import entityEmitter from '~/services/emitters/entityEmitter';
 
 import { ItemsTableStore, IItemsTableDependencies } from './ItemsTable.store';
 import EntityTable from './ItemsTable.container';
-import renderFunctions from './ItemsTable.render';
+// import renderFunctions from './ItemsTable.render';
 
 export default connect<IItemsTableDependencies>({
   isGlobal: false,
@@ -13,5 +13,5 @@ export default connect<IItemsTableDependencies>({
     entityService,
     entityEmitter,
   },
-  renderFunctions,
+  // renderFunctions,
 })(EntityTable);

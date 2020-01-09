@@ -15,7 +15,15 @@ export interface IEntityTableDependencies extends IStoreDependencies {
   entityEmitter: EntityEventEmitter;
 }
 
-export class EntityTableStore extends BaseStore {
+export interface IEntityTableStore {
+  entities: Entity[];
+  entitiesLoading: boolean;
+  selectedEntity: Entity;
+  selectedEntityId: any;
+  selectEntityId: (entityId: number) => void;
+}
+
+export class EntityTableStore extends BaseStore implements IEntityTableStore {
   private entityService: EntityService;
   @observable public entitiesResource: ResourceStore<Entity>;
   private entityEmitter: EntityEventEmitter;
@@ -37,8 +45,15 @@ export class EntityTableStore extends BaseStore {
     return this.entitiesResource.items;
   }
 
-  @computed get selectedEntity(): any {
+  @computed get selectedEntity() {
     return this.entitiesResource.selectedItem;
+  }
+
+  @computed get selectedEntityId(): any {
+    if (!this.entitiesResource.selectedItem) {
+      return;
+    }
+    return this.entitiesResource.selectedItem.id;
   }
 
   @action fetchEntities = async (): Promise<void> => {

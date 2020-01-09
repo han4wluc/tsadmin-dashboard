@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { Tooltip, Icon } from 'antd';
+import { Tooltip, Icon, Tag } from 'antd';
 import {
   Form,
   Input,
@@ -17,7 +17,7 @@ const { TextArea } = Input;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
-    sm: { span: 8 },
+    sm: { span: 6 },
   },
   wrapperCol: {
     xs: { span: 24 },
@@ -33,16 +33,17 @@ const tailFormItemLayout = {
     },
     sm: {
       span: 16,
-      offset: 8,
+      offset: 6,
     },
   },
 };
 
 function Label(props: any): any {
-  const { label } = props;
+  const { label, type } = props;
   return (
     <span>
       <span style={{ marginRight: 4 }}>{label}</span>
+      <Tag>{type}</Tag>
       <Tooltip title={label}>
         <Icon type="question-circle-o" />
       </Tooltip>
@@ -222,7 +223,11 @@ function ItemFormik(props: any): any {
             const disabled = getIfDisabled(mode, loading, create, update);
             const defaultValue = getDefaultValue(mode, create, update);
             return (
-              <Form.Item key={id} name={id} label={<Label label={label} />}>
+              <Form.Item
+                key={id}
+                name={id}
+                label={<Label label={label} type={type} />}
+              >
                 <TypeInput
                   name={id}
                   type={type}
@@ -238,7 +243,7 @@ function ItemFormik(props: any): any {
           <Form layout="vertical" {...formItemLayout}>
             {formItemsComp}
             <Form.Item name="_" {...tailFormItemLayout}>
-              <SubmitButton loading={false} disabled={false}>
+              <SubmitButton loading={loading} disabled={false}>
                 {okText}
               </SubmitButton>
             </Form.Item>

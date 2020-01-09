@@ -54,4 +54,11 @@ class BaseStore {
   }
 }
 
-export { connect, BaseStore };
+const useStore = (Store: any, initialState: any): any => {
+  const store = useMemo(() => {
+    return new Store(initialState);
+  }, [Store, initialState]);
+  return store;
+};
+
+export { connect, BaseStore, useStore };

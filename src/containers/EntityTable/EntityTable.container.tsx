@@ -1,24 +1,42 @@
-import React, { useCallback } from 'react';
-import { List } from 'antd';
+import React, { useCallback, useMemo } from 'react';
+import { Menu, Spin } from 'antd';
 import FlexView from 'react-flexview';
 
-import { EntityTableStore } from './EntityTable.store';
+import { IEntityTableStore } from './EntityTable.store';
 
-function EntityTable(props: {
-  store: EntityTableStore;
-  renderAction: any;
-  renderEntity: any;
-}): any {
-  const { store: s, renderEntity } = props;
-  const _renderEntity = useCallback(renderEntity, [s.selectedEntity]);
+function EntityTable(props: { store: IEntityTableStore }) {
+  const { store: s } = props;
+
+  const handleClick = useCallback(
+    e => {
+      s.selectEntityId(parseInt(e.key, 10));
+    },
+    [s],
+  );
+
+  const renderEntities = useMemo(() => {
+    return s.entities.map(entity => {
+      return <Menu.Item key={entity.id}>{entity.label}</Menu.Item>;
+    });
+  }, [s]);
+
   return (
-    <FlexView basis={200}>
-      <List
-        itemLayout="horizontal"
-        dataSource={s.entities}
-        loading={s.entitiesLoading}
-        renderItem={_renderEntity}
-      />
+    <FlexView
+      basis={200}
+      style={{
+        minHeight: 80,
+      }}
+    >
+      <Spin spinning={s.entitiesLoading}>
+        <Menu
+          onClick={handleClick}
+          style={{ width: 256 }}
+          selectedKeys={[s.selectedEntityId]}
+          mode="inline"
+        >
+          {renderEntities}
+        </Menu>
+      </Spin>
     </FlexView>
   );
 }

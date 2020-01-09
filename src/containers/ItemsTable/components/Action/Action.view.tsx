@@ -1,25 +1,21 @@
 import React from 'react';
 import { useCallback } from 'react';
-import { Modal } from 'antd';
+import { Modal, Divider } from 'antd';
 
 function Action(props: any): any {
-  const { item, onClickDelete, onClickEdit } = props;
-
-  const handleOnClickEdit = useCallback(() => {
-    onClickEdit(item.id);
-  }, [onClickEdit, item]);
+  const { onClickDelete, onClickEdit } = props;
 
   const handleOnClickDelete = useCallback(() => {
     Modal.confirm({
       content: 'Delete item?',
-      onOk: () => onClickDelete(item.id),
+      onOk: onClickDelete,
     });
-  }, [onClickDelete, item]);
+  }, [onClickDelete]);
 
   return (
     <div>
-      <span onClick={handleOnClickEdit}>Edit{'  '}</span>
-      <span onClick={handleOnClickDelete}>Delete</span>
+      <a onClick={onClickEdit}>Edit{'  '}</a>
+      <a onClick={handleOnClickDelete}>Delete</a>
     </div>
   );
 }

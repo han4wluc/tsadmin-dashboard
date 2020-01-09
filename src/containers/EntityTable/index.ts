@@ -7,7 +7,6 @@ import {
   IEntityTableDependencies,
 } from './EntityTable.store';
 import EntityTable from './EntityTable.container';
-import renderFunctions from './EntityTable.render';
 
 export default connect<IEntityTableDependencies>({
   isGlobal: false,
@@ -16,5 +15,4 @@ export default connect<IEntityTableDependencies>({
     entityService,
     entityEmitter,
   },
-  renderFunctions,
 })(EntityTable);
