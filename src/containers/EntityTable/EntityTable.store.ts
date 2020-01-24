@@ -20,7 +20,7 @@ export interface IEntityTableStore {
   entitiesLoading: boolean;
   selectedEntity: Entity;
   selectedEntityId: any;
-  selectEntityId: (entityId: number) => void;
+  selectEntityId: (entityId: string | number) => void;
 }
 
 export class EntityTableStore extends BaseStore implements IEntityTableStore {
@@ -69,7 +69,7 @@ export class EntityTableStore extends BaseStore implements IEntityTableStore {
     this.entitiesLoading = false;
   };
 
-  @action selectEntityId = (entityId: number): void => {
+  @action selectEntityId = (entityId: string | number): void => {
     this.entitiesResource.setSelectedId(entityId);
   };
 }

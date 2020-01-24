@@ -2,33 +2,28 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { observer } from 'mobx-react';
 
 interface IConnectPramaters<T> {
-  isGlobal: boolean;
+  isGlobal?: boolean;
   Store: any;
-  dependencies: T;
-  renderFunctions?: any;
+  dependencies?: T;
 }
 
 function connect<T>({
-  isGlobal,
+  isGlobal = false,
   Store,
   dependencies,
-  renderFunctions = (): void => {
-    /** */
-  },
 }: IConnectPramaters<T>) {
   return (Element: any): any => {
     const ReturnComp = (props: any): any => {
       const OElement: any = observer(Element);
       const [store] = useState(
-        isGlobal ? Store.getInstance(dependencies) : new Store(dependencies),
+        isGlobal
+          ? Store.getInstance({ ...dependencies, ...props.dependencies })
+          : new Store({ ...dependencies, ...props.dependencies }),
       );
       useEffect(() => {
         return store.mount();
       }, [store]);
-      const renderFunctionProps = useMemo(() => {
-        return renderFunctions(store);
-      }, [store]);
-      return <OElement {...props} {...renderFunctionProps} store={store} />;
+      return <OElement {...props} store={store} />;
     };
     ReturnComp.displayName = 'DisplayName';
     return ReturnComp;
@@ -54,7 +49,7 @@ class BaseStore {
   }
 }
 
-const useStore = (Store: any, initialState: any): any => {
+const useStore = (Store: any, initialState: any, deps: any = []): any => {
   const store = useMemo(() => {
     return new Store(initialState);
   }, [Store, initialState]);

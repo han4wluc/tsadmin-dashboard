@@ -28,13 +28,32 @@ type Page = {
   total: number;
 };
 
+const sortConditionToString = (sortCondition: any) => {
+  if (sortCondition === undefined || sortCondition.length === 0) {
+    return undefined;
+  }
+  return sortCondition
+    .map(({ id, operator }: any) => `${id}:${operator}`)
+    .join(',');
+};
+
+const filterConditionToString = (filterCondition: any) => {
+  if (filterCondition === undefined || filterCondition.length === 0) {
+    return undefined;
+  }
+  const str = filterCondition
+    .map(({ id, operator, value }: any) => `${id}:${operator}:${value}`)
+    .join(',');
+  return `and(${str})`;
+};
+
 export interface IItemsTableStore {
   showUpdateModal: (itemId: string | number) => void;
   deleteItem: (id: any) => Promise<void>;
-  sortString?: any[];
-  setSortString: (sortString: any) => void;
-  filterString?: any[];
-  setFilterString: (filterString: any) => void;
+  sortCondition?: any[];
+  setSortCondition: (sortCondition: any) => void;
+  filterCondition?: any[];
+  setFilterCondition: (filterCondition: any) => void;
   doSearch: () => void;
   showCreateModal: () => void;
   items: any[];
@@ -56,8 +75,8 @@ export class ItemsTableStore extends BaseStore implements IItemsTableStore {
   private itemsResource: ResourceStore<object>;
   private modalStore: ModalStore<any>;
   private entityEmitter: EntityEventEmitter;
-  private currentFilterString?: any;
-  private currentSortString?: any;
+  private currentFilterCondition?: any = [];
+  private currentSortCondition?: any = [];
 
   constructor(protected dependencies: IItemsTableDependencies) {
     super(dependencies);
@@ -84,8 +103,8 @@ export class ItemsTableStore extends BaseStore implements IItemsTableStore {
     size: 20,
     total: 0,
   };
-  @observable filterString?: any[];
-  @observable sortString?: any[];
+  @observable filterCondition?: any[];
+  @observable sortCondition?: any[];
 
   @computed get pageInfo(): any {
     const page = this.page;
@@ -133,17 +152,17 @@ export class ItemsTableStore extends BaseStore implements IItemsTableStore {
     return this.modalMode === ModalMode.create ? 'Create' : 'Edit';
   }
 
-  @action setFilterString = (filterString: any): void => {
-    this.filterString = filterString;
+  @action setFilterCondition = (filterCondition: any): void => {
+    this.filterCondition = filterCondition;
   };
 
-  @action setSortString = (sortString: any): void => {
-    this.sortString = sortString;
+  @action setSortCondition = (sortCondition: any): void => {
+    this.sortCondition = sortCondition;
   };
 
   doSearch = () => {
-    this.currentFilterString = this.filterString;
-    this.currentSortString = this.sortString;
+    this.currentFilterCondition = this.filterCondition;
+    this.currentSortCondition = this.sortCondition;
     this.fetchData();
   };
 
@@ -159,8 +178,8 @@ export class ItemsTableStore extends BaseStore implements IItemsTableStore {
           params: {
             pageNum,
             pageSize: this.page.size,
-            filter: this.currentFilterString,
-            sort: this.currentSortString,
+            filter: filterConditionToString(this.currentFilterCondition),
+            sort: sortConditionToString(this.currentSortCondition),
           },
         },
       );
@@ -168,6 +187,7 @@ export class ItemsTableStore extends BaseStore implements IItemsTableStore {
       this.page = page;
     } catch (error) {
       message.error('network error');
+      console.warn('error', error);
     }
     this.itemsLoading = false;
   };
@@ -180,7 +200,7 @@ export class ItemsTableStore extends BaseStore implements IItemsTableStore {
     await this.entityService.createItem(this.selectedEntity.label, data);
     this.createItemLoading = false;
     this.hideModal();
-    message.success('Update successful');
+    message.success('Create successful');
     this.fetchData();
   };
 

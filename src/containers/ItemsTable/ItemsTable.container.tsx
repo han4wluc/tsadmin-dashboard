@@ -31,15 +31,28 @@ function ItemsTable(props: { store: IItemsTableStore }): any {
     [s],
   );
 
+  console.warn('s.columns', '');
+
   return (
     <FlexView grow>
       <FlexView column={true} grow>
         <Card>
           <FlexView column={true}>
-            <SortEditor value={s.sortString} onChangeValue={s.setSortString} />
+            <SortEditor
+              value={s.sortCondition}
+              onChangeValue={s.setSortCondition}
+              columns={s.columns.map(c => c.id)}
+              dependencies={{
+                localValue: [],
+              }}
+            />
             <FilterEditor
-              value={s.filterString}
-              onChangeValue={s.setFilterString}
+              value={s.filterCondition}
+              onChangeValue={s.setFilterCondition}
+              columns={s.columns.map(c => c.id)}
+              dependencies={{
+                localValue: [],
+              }}
             />
             <Button style={{ width: 300 }} type="primary" onClick={s.doSearch}>
               Search

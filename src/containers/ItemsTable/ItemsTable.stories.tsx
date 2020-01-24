@@ -79,10 +79,10 @@ export const normal = () => {
           deleteItem: () => {
             return Promise.resolve();
           },
-          sortString: [],
-          setSortString: action('setSortString'),
-          filterString: [],
-          setFilterString: action('setFilterString'),
+          sortCondition: [],
+          setSortCondition: action('sortCondition'),
+          filterCondition: [],
+          setFilterCondition: action('setFilterString'),
           doSearch: action('doSearch'),
           showCreateModal: action('showCreateModal'),
           items,

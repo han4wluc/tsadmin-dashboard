@@ -9,7 +9,7 @@ function EntityTable(props: { store: IEntityTableStore }) {
 
   const handleClick = useCallback(
     e => {
-      s.selectEntityId(parseInt(e.key, 10));
+      s.selectEntityId(e.key);
     },
     [s],
   );
@@ -18,26 +18,19 @@ function EntityTable(props: { store: IEntityTableStore }) {
     return s.entities.map(entity => {
       return <Menu.Item key={entity.id}>{entity.label}</Menu.Item>;
     });
-  }, [s]);
+  }, [s.entities]);
 
   return (
-    <FlexView
-      basis={200}
-      style={{
-        minHeight: 80,
-      }}
-    >
-      <Spin spinning={s.entitiesLoading}>
-        <Menu
-          onClick={handleClick}
-          style={{ width: 256 }}
-          selectedKeys={[s.selectedEntityId]}
-          mode="inline"
-        >
-          {renderEntities}
-        </Menu>
-      </Spin>
-    </FlexView>
+    <Spin spinning={s.entitiesLoading}>
+      <Menu
+        onClick={handleClick}
+        style={{ width: 196 }}
+        selectedKeys={[String(s.selectedEntityId)]}
+        mode="inline"
+      >
+        {renderEntities}
+      </Menu>
+    </Spin>
   );
 }
 

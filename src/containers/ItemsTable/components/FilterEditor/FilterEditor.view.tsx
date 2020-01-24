@@ -1,10 +1,6 @@
 import React from 'react';
 import { Input, Tag, Button, Modal, Select, Form } from 'antd';
 import FlexView from 'react-flexview';
-import { observer } from 'mobx-react';
-import { useStore } from '../../../../utils/mobxConnect';
-
-import Store from './FilterEditor.state';
 
 const { Option } = Select;
 
@@ -17,11 +13,7 @@ const convertToString = (arr: any) => {
 };
 
 function FilterEditor(props: any): any {
-  const { value = [], onChangeValue, columns } = props;
-  const s = useStore(Store, {
-    localValue: value,
-  });
-
+  const { store: s, value = [], onChangeValue, columns } = props;
   const comps = s.localValue.map(
     (
       {
@@ -110,4 +102,4 @@ function FilterEditor(props: any): any {
   );
 }
 
-export default observer(FilterEditor);
+export default FilterEditor;

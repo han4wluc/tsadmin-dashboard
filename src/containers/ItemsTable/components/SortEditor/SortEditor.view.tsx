@@ -1,10 +1,6 @@
 import React from 'react';
-import { Input, Tag, Button, Modal, Select, Form } from 'antd';
+import { Tag, Button, Modal, Select, Form } from 'antd';
 import FlexView from 'react-flexview';
-import { observer } from 'mobx-react';
-import { useStore } from '../../../../utils/mobxConnect';
-
-import Store from './SortEditor.state';
 
 const { Option } = Select;
 
@@ -17,10 +13,7 @@ const convertToString = (arr: any) => {
 };
 
 function SortEditor(props: any): any {
-  const { value = [], onChangeValue, columns } = props;
-  const s = useStore(Store, {
-    localValue: value,
-  });
+  const { store: s, value = [], onChangeValue, columns } = props;
 
   const comps = s.localValue.map(
     (
@@ -103,4 +96,4 @@ function SortEditor(props: any): any {
   );
 }
 
-export default observer(SortEditor);
+export default SortEditor;

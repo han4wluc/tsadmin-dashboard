@@ -1,8 +1,10 @@
 import { action, observable } from 'mobx';
+import { BaseStore } from '../../../../utils/mobxConnect';
 
-class Store {
-  constructor({ localValue }: { localValue: any }) {
-    this.localValue = localValue;
+export class FilterEditorStore extends BaseStore {
+  constructor(props: { localValue: any }) {
+    super(props);
+    this.localValue = props.localValue;
   }
   @observable editModalVisible = false;
   @observable localValue: any[] = [];
@@ -32,5 +34,3 @@ class Store {
     this.editModalVisible = false;
   };
 }
-
-export default Store;
