@@ -5,6 +5,7 @@ import FlexView from 'react-flexview';
 
 import EntityTable from '~/containers/EntityTable';
 import ItemsTable from '~/containers/ItemsTable';
+import Settings from '~/containers/Settings';
 
 import 'antd/dist/antd.css';
 
@@ -29,7 +30,12 @@ export default class Counter extends React.Component<any, any> {
           <FlexView>
             <EntityTable />
             <FlexView width={48} />
-            <ItemsTable />
+            <FlexView column>
+              <FlexView hAlignContent="right">
+                <Settings />
+              </FlexView>
+              <ItemsTable />
+            </FlexView>
           </FlexView>
         </Content>
         <Footer>Footer</Footer>

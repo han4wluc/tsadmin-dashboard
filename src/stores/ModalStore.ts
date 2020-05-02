@@ -14,7 +14,7 @@ class ModalStore<T> {
     this.payload = payload;
   }
 
-  @action hide(payload: T, delay = 500): void {
+  @action hide(payload?: T, delay = 500): void {
     this.visible = false;
     setTimeout(() => {
       this.payload = payload;

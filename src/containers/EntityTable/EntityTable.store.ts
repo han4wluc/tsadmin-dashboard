@@ -36,7 +36,9 @@ export class EntityTableStore extends BaseStore implements IEntityTableStore {
   }
 
   mount(): any {
-    this.fetchEntities();
+    setTimeout(() => {
+      this.fetchEntities();
+    }, 100);
   }
 
   @observable entitiesLoading: boolean = true;
