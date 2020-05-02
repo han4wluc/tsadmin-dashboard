@@ -6,24 +6,23 @@ import { IEntityTableStore } from './EntityTable.store';
 
 function EntityTable(props: { store: IEntityTableStore }) {
   const { store: s } = props;
-
-  const handleClick = useCallback(
-    e => {
-      s.selectEntityId(e.key);
-    },
-    [s],
-  );
-
   const renderEntities = useMemo(() => {
     return s.entities.map(entity => {
-      return <Menu.Item key={entity.id}>{entity.label}</Menu.Item>;
+      const handleClick = () => {
+        s.selectEntityId(entity.id);
+      };
+      return (
+        <Menu.Item onClick={handleClick} key={entity.id}>
+          {entity.label}
+        </Menu.Item>
+      );
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [s.entities]);
 
   return (
     <Spin spinning={s.entitiesLoading}>
       <Menu
-        onClick={handleClick}
         style={{ width: 196 }}
         selectedKeys={[String(s.selectedEntityId)]}
         mode="inline"

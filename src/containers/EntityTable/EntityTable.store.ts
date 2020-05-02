@@ -71,5 +71,6 @@ export class EntityTableStore extends BaseStore implements IEntityTableStore {
 
   @action selectEntityId = (entityId: string | number): void => {
     this.entitiesResource.setSelectedId(entityId);
+    this.entityEmitter.emitOnChooseEntity(this.selectedEntity);
   };
 }

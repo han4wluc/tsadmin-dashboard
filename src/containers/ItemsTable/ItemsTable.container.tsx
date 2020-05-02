@@ -31,8 +31,6 @@ function ItemsTable(props: { store: IItemsTableStore }): any {
     [s],
   );
 
-  console.warn('s.columns', '');
-
   return (
     <FlexView grow>
       <FlexView column={true} grow>
