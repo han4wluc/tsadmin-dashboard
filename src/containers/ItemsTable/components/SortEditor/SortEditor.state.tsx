@@ -1,9 +1,7 @@
 import { action, observable } from 'mobx';
-import { BaseStore } from '../../../../utils/mobxConnect';
 
-class SortEditorStore extends BaseStore {
+class SortEditorStore {
   constructor(props: { localValue: any }) {
-    super(props);
     this.localValue = props.localValue;
   }
   @observable editModalVisible = false;

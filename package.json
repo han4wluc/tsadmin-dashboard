@@ -73,6 +73,7 @@
     "lodash": "^4.17.15",
     "mobx": "^5.15.0",
     "mobx-react": "^6.1.4",
+    "mobx-react-bind": "^0.1.0",
     "next": "^9.1.4",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",

@@ -1,21 +1,18 @@
-import { BaseStore, IStoreDependencies } from '~/utils/mobxConnect';
 import ModalStore from '~/stores/ModalStore';
-import { AxiosInstance } from 'axios';
 import EntityService from '~/services/api/EntityService';
 import { message } from 'antd';
 
-export interface ISettingsStoreDependencies extends IStoreDependencies {
+export interface ISettingsStoreDependencies {
   entityService: EntityService;
 }
 
-export class SettingsStore extends BaseStore {
+export class SettingsStore {
   public modalStore: ModalStore<any>;
 
   entityService: EntityService;
   url = '';
 
   constructor(protected dependencies: ISettingsStoreDependencies) {
-    super(dependencies);
     this.modalStore = new ModalStore<any>();
     this.entityService = dependencies.entityService;
   }

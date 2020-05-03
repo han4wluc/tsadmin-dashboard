@@ -1,6 +1,6 @@
 import { action, observable, computed } from 'mobx';
 import { EntityEventEmitter } from '~/services/emitters/entityEmitter';
-import { BaseStore, IStoreDependencies } from '~/utils/mobxConnect';
+
 import EntityService from '~/services/api/EntityService';
 import ResourceStore from '~/stores/ResourceStore';
 
@@ -10,7 +10,7 @@ export type Entity = {
   columns: any;
 };
 
-export interface IEntityTableDependencies extends IStoreDependencies {
+export interface IEntityTableDependencies {
   entityService: EntityService;
   entityEmitter: EntityEventEmitter;
 }
@@ -23,13 +23,12 @@ export interface IEntityTableStore {
   selectEntityId: (entityId: string | number) => void;
 }
 
-export class EntityTableStore extends BaseStore implements IEntityTableStore {
+export class EntityTableStore implements IEntityTableStore {
   private entityService: EntityService;
   @observable public entitiesResource: ResourceStore<Entity>;
   private entityEmitter: EntityEventEmitter;
 
   constructor(protected dependencies: IEntityTableDependencies) {
-    super(dependencies);
     this.entityService = dependencies.entityService;
     this.entityEmitter = dependencies.entityEmitter;
     this.entitiesResource = new ResourceStore<Entity>([], x => x.id);

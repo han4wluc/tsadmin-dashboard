@@ -1,7 +1,7 @@
-import { connect } from '../../../../utils/mobxConnect';
+import mobxReactBind from 'mobx-react-bind';
 import SortEditorView from './SortEditor.view';
 import SortEditorStore from './SortEditor.state';
 
-export default connect<any>({
+export default mobxReactBind<any>({
   Store: SortEditorStore,
 })(SortEditorView);

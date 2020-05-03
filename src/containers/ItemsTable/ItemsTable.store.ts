@@ -1,7 +1,6 @@
 import { action, observable, computed } from 'mobx';
 import { message } from 'antd';
 import { EntityEventEmitter } from '~/services/emitters/entityEmitter';
-import { BaseStore, IStoreDependencies } from '~/utils/mobxConnect';
 import EntityService from '~/services/api/EntityService';
 import ResourceStore from '~/stores/ResourceStore';
 import ModalStore from '~/stores/ModalStore';
@@ -12,7 +11,7 @@ export type Entity = {
   columns: any;
 };
 
-export interface IItemsTableDependencies extends IStoreDependencies {
+export interface IItemsTableDependencies {
   entityService: EntityService;
   entityEmitter: EntityEventEmitter;
 }
@@ -70,7 +69,7 @@ export interface IItemsTableStore {
   onSubmitForm: (data: any) => void;
 }
 
-export class ItemsTableStore extends BaseStore implements IItemsTableStore {
+export class ItemsTableStore implements IItemsTableStore {
   private entityService: EntityService;
   private itemsResource: ResourceStore<object>;
   private modalStore: ModalStore<any>;
@@ -79,7 +78,6 @@ export class ItemsTableStore extends BaseStore implements IItemsTableStore {
   private currentSortCondition?: any = [];
 
   constructor(protected dependencies: IItemsTableDependencies) {
-    super(dependencies);
     this.entityService = dependencies.entityService;
     this.entityEmitter = dependencies.entityEmitter;
     this.itemsResource = new ResourceStore<object>([], (x: any) => x.id);
