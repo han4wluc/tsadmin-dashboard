@@ -8,7 +8,7 @@ function DataTable(props: any): any {
   const { items, loading, columns, renderAction, pageInfo, fetchData } = props;
 
   const columnsComp = columns.map((column: any) => {
-    const { id, label, type, options } = column;
+    const { id, label, type, options, fixed } = column;
     let render = undefined;
     if (type === 'boolean') {
       render = (value: boolean) => {
@@ -20,7 +20,7 @@ function DataTable(props: any): any {
       render = (value: object) => {
         const content = <div>{JSON.stringify(value, null, 2)}</div>;
         return (
-          <Popover content={content} trigger="hover" placement="left">
+          <Popover content={content} trigger="hover" placement="top">
             <div>...</div>
           </Popover>
         );
@@ -37,6 +37,31 @@ function DataTable(props: any): any {
         return valueObject[value];
       };
     }
+
+    if (type === 'model') {
+      // eslint-disable-next-line react/display-name
+      render = (value: any) => {
+        const { label, nameAttribute } = options;
+        if (!value) {
+          return null;
+        }
+        const content = (
+          <div
+            style={{
+              whiteSpace: 'pre-wrap',
+            }}
+          >
+            {JSON.stringify(value, null, 2)}
+          </div>
+        );
+        return (
+          <Popover content={content} trigger="hover" placement="top">
+            <div>{`${label}{${value[nameAttribute]}}`}</div>
+          </Popover>
+        );
+      };
+    }
+
     return (
       <Column
         key={label}
@@ -46,6 +71,8 @@ function DataTable(props: any): any {
             <Tag>{type}</Tag>
           </FlexView>
         )}
+        width={150}
+        fixed={fixed}
         dataIndex={id}
         render={render}
       />
@@ -59,6 +86,7 @@ function DataTable(props: any): any {
         title="actions"
         dataIndex="actions"
         width={100}
+        fixed={'right'}
         render={renderAction}
       />,
     );
@@ -67,6 +95,7 @@ function DataTable(props: any): any {
   return (
     <div>
       <Table
+        scroll={{ x: 150 * columns.length + 100 }}
         dataSource={items}
         rowKey="id"
         loading={loading}

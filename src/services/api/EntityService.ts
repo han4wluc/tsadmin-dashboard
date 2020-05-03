@@ -8,8 +8,26 @@ class EntityService {
     this.httpClient = httpClient;
   }
 
+  setUrl = (url: string): void => {
+    this.httpClient.defaults.baseURL = url;
+  };
+
   setAuthToken = (token: string): void => {
     this.httpClient.defaults.headers['Authorization'] = `Bearer ${token}`;
+  };
+
+  authorize = async (url: string, authToken: string): Promise<any> => {
+    if (!authToken) {
+      const res = await this.httpClient.post(url + 'authorize');
+      return res.data;
+    }
+
+    const res = await this.httpClient.post(url + 'authorize', null, {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+    return res.data;
   };
 
   createItem = async (entityName: string, data: any): Promise<any> => {

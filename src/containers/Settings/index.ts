@@ -2,12 +2,12 @@ import { connect } from '~/utils/mobxConnect';
 
 import { SettingsStore, ISettingsStoreDependencies } from './Settings.store';
 import SettingsView from './Settings.container';
-import tsAdminClient from '~/services/api/clients/tsAdminClient';
+import { entityService } from '~/services/api/EntityService';
 
 export default connect<ISettingsStoreDependencies>({
   isGlobal: false,
   Store: SettingsStore,
   dependencies: {
-    tsAdminClient,
+    entityService,
   },
 })(SettingsView);

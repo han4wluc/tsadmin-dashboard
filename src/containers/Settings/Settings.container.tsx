@@ -2,15 +2,7 @@ import React from 'react';
 import { Modal } from 'antd';
 import { SettingsStore } from './Settings.store';
 
-import {
-  Form,
-  Input,
-  InputNumber,
-  Checkbox,
-  SubmitButton,
-  DatePicker,
-  Select,
-} from 'formik-antd';
+import { Form, Input, SubmitButton } from 'formik-antd';
 import { Formik } from 'formik';
 
 const formItemLayout = {
@@ -51,12 +43,16 @@ function Settings(props: { store: SettingsStore }) {
         <Formik
           initialValues={{
             url: store.url,
+            token: '',
           }}
           onSubmit={store.submit}
         >
           <Form layout="vertical" {...formItemLayout}>
-            <Form.Item key="url" name="url" label="Ok">
+            <Form.Item key="url" name="url" label="Url">
               <Input name="url" />
+            </Form.Item>
+            <Form.Item key="authToken" name="authToken" label="Auth Token">
+              <Input name="authToken" />
             </Form.Item>
             <Form.Item name="_" {...tailFormItemLayout}>
               <SubmitButton disabled={false}>OK</SubmitButton>

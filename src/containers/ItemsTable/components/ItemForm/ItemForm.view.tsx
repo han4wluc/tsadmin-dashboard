@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import axios from 'axios';
+import tsAdminClient from '~/services/api/clients/tsAdminClient';
+import { uniqBy } from 'lodash';
 import { Tooltip, Icon, Tag } from 'antd';
 import {
   Form,
@@ -51,6 +54,50 @@ function Label(props: any): any {
   );
 }
 
+function ModelInput(props: any) {
+  const { id, label, nameAttribute, data } = props;
+  const [items, setItems] = useState([]);
+  useEffect(() => {
+    async function fetchItems() {
+      const { data } = await tsAdminClient.get(`${id}`);
+      setItems(data.items);
+    }
+    fetchItems();
+  }, [id]);
+
+  const options = uniqBy((data[id] || []).concat(items), 'id');
+
+  return (
+    <Select
+      name={id}
+      filterOption={false}
+      showSearch={true}
+      onSearch={async (val: string) => {
+        if (!val || val === '') {
+          const { data } = await tsAdminClient.get(`${id}`);
+          setItems(data.items);
+          return;
+        }
+        const { data } = await tsAdminClient.get(`${id}`, {
+          params: {
+            filter: `and(${nameAttribute}:eq:${val})`,
+          },
+        });
+        setItems(data.items);
+      }}
+    >
+      {options.map((item: any) => {
+        return (
+          <Select.Option
+            key={item.id}
+            value={item.id}
+          >{`${label}{${item[nameAttribute]}}`}</Select.Option>
+        );
+      })}
+    </Select>
+  );
+}
+
 function getIfDisabled(
   mode: string,
   loading: boolean,
@@ -97,7 +144,7 @@ function createFilterColumnsFunction(mode: string) {
 }
 
 function TypeInput(props: any): any {
-  const { type, options = {}, ...otherProps } = props;
+  const { type, options = {}, data, ...otherProps } = props;
 
   if (type === 'enum') {
     const { enumObject } = options;
@@ -159,16 +206,39 @@ function TypeInput(props: any): any {
     return <TextArea rows={rows} {...otherProps} defaultValue={defaultValue} />;
   }
 
+  if (type === 'model') {
+    return <ModelInput {...options} data={data} />;
+  }
+
   return <Input {...otherProps} />;
 }
 
 function ItemFormik(props: any): any {
-  const { item = {}, onSubmit, mode, columns = [], loading, okText } = props;
-  const filterColumns = createFilterColumnsFunction(mode);
+  const [data, setData] = useState({});
 
+  const { item = {}, onSubmit, mode, columns = [], loading, okText } = props;
   const initialValues = {
     ...item,
   };
+
+  useEffect(() => {
+    async function fetchItems(id: string) {
+      const { data: newItem } = await tsAdminClient.get(
+        `${id}/${initialValues[id]}`,
+      );
+      setData({
+        ...data,
+        [id]: [newItem],
+      });
+    }
+
+    columns.forEach((column: any) => {
+      if (column.type === 'model') {
+        fetchItems(column.options.id);
+      }
+    });
+  }, [columns, data, initialValues]);
+  const filterColumns = createFilterColumnsFunction(mode);
 
   columns.filter(filterColumns).forEach((column: any) => {
     const { id, type, create, update } = column;
@@ -183,6 +253,11 @@ function ItemFormik(props: any): any {
       const defaultValue = getDefaultValue(mode, create, update);
       if (defaultValue) {
         initialValues[id] = defaultValue;
+      }
+    }
+    if (type === 'model') {
+      if (initialValues[id]) {
+        initialValues[id] = initialValues[id].id;
       }
     }
   });
@@ -204,6 +279,12 @@ function ItemFormik(props: any): any {
         finalValues[id] = values[id] ? JSON.stringify(values[id]) : undefined;
       } else if (type === 'json') {
         finalValues[id] = values[id] ? JSON.parse(values[id]) : undefined;
+      } else if (type === 'model') {
+        finalValues[id] = {
+          id: values[id],
+        };
+      } else if (type === 'boolean') {
+        finalValues[id] = !!values[id];
       } else {
         finalValues[id] = values[id];
       }
@@ -234,6 +315,7 @@ function ItemFormik(props: any): any {
                   disabled={disabled}
                   options={options}
                   defaultValue={defaultValue}
+                  data={data}
                 />
               </Form.Item>
             );

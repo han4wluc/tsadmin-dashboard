@@ -60,6 +60,7 @@
   "dependencies": {
     "@types/antd": "^1.0.0",
     "@types/fbemitter": "^2.0.32",
+    "@types/lodash": "^4.14.150",
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-less": "^1.0.1",
     "antd": "^3.26.0",
@@ -68,6 +69,7 @@
     "formik": "^2.0.8",
     "formik-antd": "^1.6.0",
     "less": "^3.10.3",
+    "lodash": "^4.17.15",
     "mobx": "^5.15.0",
     "mobx-react": "^6.1.4",
     "next": "^9.1.4",
