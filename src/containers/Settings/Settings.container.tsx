@@ -47,7 +47,7 @@ function Settings(props: { store: SettingsStore }) {
           }}
           onSubmit={store.submit}
         >
-          <Form layout="vertical" {...formItemLayout}>
+          <Form {...formItemLayout}>
             <Form.Item key="url" name="url" label="Url">
               <Input name="url" />
             </Form.Item>

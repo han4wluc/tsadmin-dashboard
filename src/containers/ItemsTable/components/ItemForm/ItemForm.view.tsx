@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import axios from 'axios';
 import tsAdminClient from '~/services/api/clients/tsAdminClient';
 import { uniqBy } from 'lodash';
-import { Tooltip, Icon, Tag } from 'antd';
+import { Tooltip, Tag } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import {
   Form,
   Input,
@@ -48,7 +48,7 @@ function Label(props: any): any {
       <span style={{ marginRight: 4 }}>{label}</span>
       <Tag>{type}</Tag>
       <Tooltip title={label}>
-        <Icon type="question-circle-o" />
+        <QuestionCircleOutlined />
       </Tooltip>
     </span>
   );
@@ -322,7 +322,7 @@ function ItemFormik(props: any): any {
           });
 
         return (
-          <Form layout="vertical" {...formItemLayout}>
+          <Form {...formItemLayout}>
             {formItemsComp}
             <Form.Item name="_" {...tailFormItemLayout}>
               <SubmitButton loading={loading} disabled={false}>
