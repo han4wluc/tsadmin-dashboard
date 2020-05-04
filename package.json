@@ -8,8 +8,8 @@
     "build": "next build ./src && next export ./src -o build",
     "start": "next start ./src",
     "lint": "eslint src --ext ts --ext tsx",
-    "test": "TS_NODE_PROJECT=tests/tsconfig.json mocha --opts tests/mocha.opts",
-    "test:watch": "TS_NODE_PROJECT=tests/tsconfig.json mocha --opts tests/mocha.opts --watch",
+    "test": "TS_NODE_PROJECT=test/tsconfig.json mocha --opts test/mocha.opts",
+    "test:watch": "TS_NODE_PROJECT=test/tsconfig.json mocha --opts test/mocha.opts --watch",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
