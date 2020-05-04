@@ -1,10 +1,19 @@
-import { EventEmitter } from 'fbemitter';
+import { EventEmitter, EventSubscription } from 'fbemitter';
 
 enum Events {
+  doFetchEntities = 'doFetchEntities',
   onChooseEntity = 'onChooseEntity',
 }
 
 export class EntityEventEmitter extends EventEmitter {
+  emitDoFetchEntities = (): void => {
+    this.emit(Events.doFetchEntities);
+  };
+
+  addDoFetchEntitiesListener = (calllback: Function): EventSubscription => {
+    return this.addListener(Events.doFetchEntities, calllback);
+  };
+
   emitOnChooseEntity = (entity: any): void => {
     this.emit(Events.onChooseEntity, entity);
   };

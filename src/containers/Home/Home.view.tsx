@@ -1,5 +1,3 @@
-import { HomeStore } from './Home.store';
-
 import React from 'react';
 import { Layout, Spin } from 'antd';
 import FlexView from 'react-flexview';
@@ -8,7 +6,8 @@ import EntityTable from '~/containers/EntityTable';
 import ItemsTable from '~/containers/ItemsTable';
 import Settings from '~/containers/Settings';
 import Footer from '~/components/Footer';
-import ServerConfigurationModal from './components/ServerConfigurationModal';
+
+import { HomeStore } from './Home.store';
 
 type Props = {
   store: HomeStore;
@@ -49,12 +48,6 @@ function Home(props: Props): any {
         )}
       </Content>
       <Footer />
-      <ServerConfigurationModal
-        visible={store.visible}
-        url={store.url}
-        onSubmit={store.submit}
-        onCancel={store.hide}
-      />
       <style jsx global>{`
         .content {
           min-height: 820px;

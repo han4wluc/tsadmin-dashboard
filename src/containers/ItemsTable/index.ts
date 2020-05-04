@@ -1,6 +1,8 @@
+import mobxReactBind from 'mobx-react-bind';
+
 import { entityService } from '~/services/api/EntityService';
 import entityEmitter from '~/services/emitters/entityEmitter';
-import mobxReactBind from 'mobx-react-bind';
+
 import { ItemsTableStore, IItemsTableDependencies } from './ItemsTable.store';
 import EntityTable from './ItemsTable.container';
 

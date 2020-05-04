@@ -10,7 +10,7 @@ function EntityTable(props: {
   const renderEntities = useMemo(() => {
     return s.entities.map((entity: any) => {
       const handleClick = () => {
-        s.selectedEntity(entity);
+        s.selectEntity(entity);
       };
       return (
         <Menu.Item onClick={handleClick} key={entity.id}>

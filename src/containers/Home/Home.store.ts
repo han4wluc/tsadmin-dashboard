@@ -1,21 +1,24 @@
 import { message } from 'antd';
 
 import { ApplicationStore } from '~/globalStores/applicationStore';
-import { EntitiesStore } from '~/globalStores/entitiesStore';
-import entityEmitter from '~/services/emitters/entityEmitter';
+import EntityService from '~/services/api/EntityService';
+import { EntityEventEmitter } from '~/services/emitters/entityEmitter';
 
 export interface IHomeStoreDependencies {
   applicationStore: ApplicationStore;
-  entitiesStore: EntitiesStore;
+  entityService: EntityService;
+  entityEmitter: EntityEventEmitter;
 }
 
 export class HomeStore {
   private applicationStore: ApplicationStore;
-  private entitiesStore: EntitiesStore;
+  private entityService: EntityService;
+  private entityEmitter: EntityEventEmitter;
 
   constructor(dependencies: IHomeStoreDependencies) {
     this.applicationStore = dependencies.applicationStore;
-    this.entitiesStore = dependencies.entitiesStore;
+    this.entityEmitter = dependencies.entityEmitter;
+    this.entityService = dependencies.entityService;
   }
 
   get applicationIsLoading(): boolean {
@@ -26,47 +29,45 @@ export class HomeStore {
     return this.applicationStore.serverIsConfigured;
   }
 
-  get url(): string {
-    return this.applicationStore.url;
-  }
-
-  get visible(): boolean {
-    return this.applicationStore.modalStore.visible;
-  }
-
-  hide = (): void => {
-    if (!this.applicationStore.serverIsConfigured) {
-      return;
-    }
-    this.applicationStore.modalStore.hide();
-  };
-
-  submit = async (values: any): Promise<any> => {
-    try {
-      await this.applicationStore.submit(values);
-      this.applicationStore.modalStore.hide();
-      const entities = await this.entitiesStore.fetchEntities();
-      if (entities.length > 0) {
-        entityEmitter.emitOnChooseEntity(entities[0]);
-      }
-    } catch (error) {
-      message.error('invalid url token');
-    }
-  };
-
-  mount = () => {
+  mount = (): void => {
     this.init();
   };
 
-  init = async () => {
-    const isAuthenticated = await this.applicationStore.checkServerConfiguration();
-    if (isAuthenticated) {
-      const entities = await this.entitiesStore.fetchEntities();
-      if (entities.length > 0) {
-        entityEmitter.emitOnChooseEntity(entities[0]);
-      }
-    } else {
-      this.applicationStore.modalStore.show('');
+  init = async (): Promise<void> => {
+    const url = localStorage.getItem('url') || '';
+    const authToken = localStorage.getItem('authToken') || '';
+
+    this.applicationStore.setUrl(url);
+
+    if (!url) {
+      this.applicationStore.setLoading(false);
+      this.applicationStore.setServerIsConfigured(false);
+      this.applicationStore.modalStore.visible = true;
+      return;
     }
+
+    try {
+      const data = await this.entityService.authorize(url, authToken);
+      if (!data.success) {
+        this.applicationStore.setLoading(false);
+        this.applicationStore.setServerIsConfigured(false);
+        return;
+      }
+    } catch (error) {
+      message.error('failed to authenticate');
+      return;
+    }
+
+    this.entityService.setUrl(url);
+    if (authToken) {
+      this.entityService.setAuthToken(authToken);
+    }
+
+    this.applicationStore.setLoading(false);
+    this.applicationStore.setServerIsConfigured(true);
+
+    setImmediate(() => {
+      this.entityEmitter.emitDoFetchEntities();
+    });
   };
 }
