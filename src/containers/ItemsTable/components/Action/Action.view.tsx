@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCallback } from 'react';
-import { Modal, Divider } from 'antd';
+import { Modal, Divider, Button } from 'antd';
 
 function Action(props: any): any {
   const { onClickDelete, onClickEdit } = props;
@@ -14,8 +14,12 @@ function Action(props: any): any {
 
   return (
     <div>
-      <a onClick={onClickEdit}>Edit{'  '}</a>
-      <a onClick={handleOnClickDelete}>Delete</a>
+      <Button onClick={onClickEdit} type="link">
+        Edit
+      </Button>
+      <Button onClick={handleOnClickDelete} type="link" danger={true}>
+        Delete
+      </Button>
     </div>
   );
 }

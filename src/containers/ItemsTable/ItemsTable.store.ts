@@ -2,8 +2,7 @@ import { action, observable, computed } from 'mobx';
 import { message } from 'antd';
 import { EntityEventEmitter } from '~/services/emitters/entityEmitter';
 import EntityService from '~/services/api/EntityService';
-import ResourceStore from '~/stores/ResourceStore';
-import ModalStore from '~/stores/ModalStore';
+import { ModalStore, ResourceStore } from 'mobx-react-bind';
 
 export type Entity = {
   id: number;
@@ -251,9 +250,6 @@ export class ItemsTableStore implements IItemsTableStore {
   };
 
   hideModal = (): void => {
-    this.modalStore.hide({
-      mode: ModalMode.create,
-      itemId: undefined,
-    });
+    this.modalStore.hide();
   };
 }

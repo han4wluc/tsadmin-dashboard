@@ -6,10 +6,11 @@ import FlexView from 'react-flexview';
 import EntityTable from '~/containers/EntityTable';
 import ItemsTable from '~/containers/ItemsTable';
 import Settings from '~/containers/Settings';
+import Footer from '~/components/Footer';
 
 import 'antd/dist/antd.css';
 
-const { Header, Footer, Content } = Layout;
+const { Header, Content } = Layout;
 
 const isServer = typeof window === 'undefined';
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -19,7 +20,13 @@ export default class Counter extends React.Component<any, any> {
   render(): any {
     return (
       <Layout>
-        <Header>Header</Header>
+        <Header className="header">
+          <FlexView vAlignContent="center">
+            <h3 style={{ marginBottom: 0 }}>tsadmin-dashboard</h3>
+            <FlexView grow />
+            <Settings />
+          </FlexView>
+        </Header>
         <Content
           style={{
             minHeight: '800px',
@@ -28,17 +35,30 @@ export default class Counter extends React.Component<any, any> {
           }}
         >
           <FlexView>
-            <EntityTable />
-            <FlexView width={48} />
-            <FlexView column>
-              <FlexView hAlignContent="right">
-                <Settings />
-              </FlexView>
+            <FlexView marginRight={48} width={196}>
+              <EntityTable />
+            </FlexView>
+            <FlexView
+              column
+              grow
+              style={{
+                maxWidth: 'calc(100vw - 200px)',
+              }}
+            >
               <ItemsTable />
             </FlexView>
           </FlexView>
         </Content>
-        <Footer>Footer</Footer>
+        <Footer />
+        <style jsx global>{`
+          .header.ant-layout-header {
+            background-color: white;
+            line-height: 64px;
+            height: 64px;
+            overflow: scroll;
+            box-shadow: 2px 4px 8px 1px #ececec;
+          }
+        `}</style>
       </Layout>
     );
   }

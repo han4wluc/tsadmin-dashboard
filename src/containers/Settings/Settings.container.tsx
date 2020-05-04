@@ -1,9 +1,11 @@
 import React from 'react';
 import { Modal } from 'antd';
 import { SettingsStore } from './Settings.store';
+import { SettingOutlined } from '@ant-design/icons';
 
 import { Form, Input, SubmitButton } from 'formik-antd';
 import { Formik } from 'formik';
+import FlexView from 'react-flexview/lib';
 
 const formItemLayout = {
   labelCol: {
@@ -33,11 +35,20 @@ function Settings(props: { store: SettingsStore }) {
   const { store } = props;
   return (
     <div>
-      <div onClick={store.modalStore.show.bind(store.modalStore)}>Settings</div>
+      <FlexView vAlignContent="center">
+        <div style={{ marginRight: 16 }}>{store.url}</div>
+        <SettingOutlined
+          onClick={() => {
+            store.modalStore.show('');
+          }}
+        />
+      </FlexView>
       <Modal
         title="Settings"
         visible={store.modalStore.visible}
-        onCancel={store.modalStore.hide.bind(store.modalStore)}
+        onCancel={() => {
+          store.modalStore.hide();
+        }}
         footer={null}
       >
         <Formik

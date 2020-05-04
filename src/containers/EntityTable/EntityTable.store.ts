@@ -1,12 +1,12 @@
 import { action, observable, computed } from 'mobx';
+import { ResourceStore } from 'mobx-react-bind';
 import { EntityEventEmitter } from '~/services/emitters/entityEmitter';
-
 import EntityService from '~/services/api/EntityService';
-import ResourceStore from '~/stores/ResourceStore';
 
 export type Entity = {
   id: number;
   label: string;
+  entity: string;
   columns: any;
 };
 

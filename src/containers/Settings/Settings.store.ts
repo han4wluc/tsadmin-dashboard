@@ -1,4 +1,5 @@
-import ModalStore from '~/stores/ModalStore';
+import { ModalStore } from 'mobx-react-bind';
+import { action, observable } from 'mobx';
 import EntityService from '~/services/api/EntityService';
 import { message } from 'antd';
 
@@ -6,10 +7,19 @@ export interface ISettingsStoreDependencies {
   entityService: EntityService;
 }
 
+function addTrailingSlash(url: string) {
+  if (url[url.length - 1] === '/') {
+    return url;
+  }
+  return url + '/';
+}
+
 export class SettingsStore {
   public modalStore: ModalStore<any>;
 
   entityService: EntityService;
+
+  @observable
   url = '';
 
   constructor(protected dependencies: ISettingsStoreDependencies) {
@@ -31,16 +41,20 @@ export class SettingsStore {
 
   submit = async (values: any) => {
     const { url, authToken } = values;
+    const urlWithSlash = addTrailingSlash(url);
 
     try {
-      await this.entityService.authorize(url, authToken);
+      const data = await this.entityService.authorize(urlWithSlash, authToken);
+      if (!data.success) {
+        throw new Error('Invalid url');
+      }
 
-      this.url = url;
-      this.entityService.setUrl(url);
+      this.url = urlWithSlash;
+      this.entityService.setUrl(urlWithSlash);
       this.entityService.setAuthToken(authToken);
 
       this.modalStore.hide();
-      localStorage.setItem('url', values.url);
+      localStorage.setItem('url', urlWithSlash);
       localStorage.setItem('authToken', values.authToken);
       message.success('Success');
     } catch (error) {

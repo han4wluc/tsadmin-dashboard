@@ -18,7 +18,11 @@ class EntityService {
 
   authorize = async (url: string, authToken: string): Promise<any> => {
     if (!authToken) {
-      const res = await this.httpClient.post(url + 'authorize');
+      const res = await this.httpClient.post(url + 'authorize', null, {
+        headers: {
+          Authorization: 'none',
+        },
+      });
       return res.data;
     }
 

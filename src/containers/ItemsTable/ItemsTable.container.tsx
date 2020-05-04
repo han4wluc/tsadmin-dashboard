@@ -3,7 +3,6 @@ import { Button, Modal, Card, Divider } from 'antd';
 import FlexView from 'react-flexview';
 
 import Action from './components/Action';
-
 import { IItemsTableStore } from './ItemsTable.store';
 import DataTable from './components/DataTable';
 import ItemForm from './components/ItemForm';
@@ -57,8 +56,7 @@ function ItemsTable(props: { store: IItemsTableStore }): any {
             </Button>
           </FlexView>
         </Card>
-        <Divider />
-        <FlexView hAlignContent="right" height="64px">
+        <FlexView hAlignContent="right" marginBottom={16} marginTop={32}>
           <Button type="primary" onClick={s.showCreateModal}>
             Create
           </Button>

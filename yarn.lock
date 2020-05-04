@@ -7583,10 +7583,10 @@ mkdirp@0.5.1, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.1:
   dependencies:
     minimist "0.0.8"
 
-mobx-react-bind@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.npmjs.org/mobx-react-bind/-/mobx-react-bind-0.1.0.tgz#9a6dad6ff3df103c136de461069d8b91376fed57"
-  integrity sha512-/7YhHb59UaYl7kDHcOayOjjaW1+47EPURlew0JHyFuyfJWZRVYwmXOxJ/+5tr3x7+3hsa092VP/F9dkt2rsatQ==
+mobx-react-bind@0.1.2:
+  version "0.1.2"
+  resolved "https://registry.npmjs.org/mobx-react-bind/-/mobx-react-bind-0.1.2.tgz#2fd9a3945e6914ef530d1f8c9a2cdbfccacdb59b"
+  integrity sha512-IeCObh+GlC9yTsabtA37uAE48EfRkr8cNjrUmt2rqKR1H+1FjBV2UueT+zONPBy/895dJ4WTv3L0+bW3l5bVIQ==
 
 mobx-react-lite@^1.4.2:
   version "1.5.1"

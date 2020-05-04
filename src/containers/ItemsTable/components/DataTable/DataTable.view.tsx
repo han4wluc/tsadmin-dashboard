@@ -83,9 +83,9 @@ function DataTable(props: any): any {
     columnsComp.push(
       <Column
         key="actions"
-        title="actions"
+        title="Actions"
         dataIndex="actions"
-        width={100}
+        width={150}
         fixed={'right'}
         render={renderAction}
       />,
@@ -93,24 +93,22 @@ function DataTable(props: any): any {
   }
 
   return (
-    <div>
-      <Table
-        scroll={{ x: 150 * columns.length + 100 }}
-        dataSource={items}
-        rowKey="id"
-        loading={loading}
-        size="small"
-        bordered={true}
-        pagination={{
-          onChange: (pageNum: number): any => {
-            fetchData(pageNum);
-          },
-          ...pageInfo,
-        }}
-      >
-        {columnsComp}
-      </Table>
-    </div>
+    <Table
+      scroll={{ x: 150 * columns.length + 150 }}
+      dataSource={items}
+      rowKey="id"
+      loading={loading}
+      size="small"
+      bordered={true}
+      pagination={{
+        onChange: (pageNum: number): any => {
+          fetchData(pageNum);
+        },
+        ...pageInfo,
+      }}
+    >
+      {columnsComp}
+    </Table>
   );
 }
 
