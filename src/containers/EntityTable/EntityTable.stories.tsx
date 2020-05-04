@@ -28,9 +28,7 @@ export const normal = () => {
     selectedEntityId: '1',
   };
   return (
-    <div style={{ width: 200 }}>
-      <EntityTable store={store} />
-    </div>
+    <div style={{ width: 200 }}>{/* <EntityTable store={store} /> */}</div>
   );
 };
 
@@ -43,8 +41,6 @@ export const loading = () => {
     selectedEntityId: '1',
   };
   return (
-    <div style={{ width: 200 }}>
-      <EntityTable store={store} />
-    </div>
+    <div style={{ width: 200 }}>{/* <EntityTable store={store} /> */}</div>
   );
 };
