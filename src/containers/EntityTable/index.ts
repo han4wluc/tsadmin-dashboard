@@ -1,6 +1,5 @@
-import { entityService } from '~/services/api/EntityService';
 import mobxReactBind from 'mobx-react-bind';
-import entityEmitter from '~/services/emitters/entityEmitter';
+import entitiesStore from '~/globalStores/entitiesStore';
 
 import {
   EntityTableStore,
@@ -12,7 +11,6 @@ export default mobxReactBind<IEntityTableDependencies>({
   isGlobal: false,
   Store: EntityTableStore,
   dependencies: {
-    entityService,
-    entityEmitter,
+    entitiesStore,
   },
 })(EntityTable);

@@ -1,15 +1,16 @@
 import React, { useMemo } from 'react';
 import { Menu, Spin } from 'antd';
-import FlexView from 'react-flexview';
 
-import { IEntityTableStore } from './EntityTable.store';
+import { EntityTableStore } from './EntityTable.store';
 
-function EntityTable(props: { store: IEntityTableStore }) {
+function EntityTable(props: {
+  store: EntityTableStore;
+}): React.FunctionComponentElement<any> {
   const { store: s } = props;
   const renderEntities = useMemo(() => {
-    return s.entities.map(entity => {
+    return s.entities.map((entity: any) => {
       const handleClick = () => {
-        s.selectEntityId(entity.id);
+        s.selectedEntity(entity);
       };
       return (
         <Menu.Item onClick={handleClick} key={entity.id}>

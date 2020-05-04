@@ -1,77 +1,31 @@
-import { action, observable, computed } from 'mobx';
-import { ResourceStore } from 'mobx-react-bind';
-import { EntityEventEmitter } from '~/services/emitters/entityEmitter';
-import EntityService from '~/services/api/EntityService';
-
-export type Entity = {
-  id: number;
-  label: string;
-  entity: string;
-  columns: any;
-};
+import { EntitiesStore } from '~/globalStores/entitiesStore';
+import entityEmitter from '~/services/emitters/entityEmitter';
 
 export interface IEntityTableDependencies {
-  entityService: EntityService;
-  entityEmitter: EntityEventEmitter;
+  entitiesStore: EntitiesStore;
 }
 
-export interface IEntityTableStore {
-  entities: Entity[];
-  entitiesLoading: boolean;
-  selectedEntity: Entity;
-  selectedEntityId: any;
-  selectEntityId: (entityId: string | number) => void;
-}
-
-export class EntityTableStore implements IEntityTableStore {
-  private entityService: EntityService;
-  @observable public entitiesResource: ResourceStore<Entity>;
-  private entityEmitter: EntityEventEmitter;
+export class EntityTableStore {
+  private entitiesStore: EntitiesStore;
 
   constructor(protected dependencies: IEntityTableDependencies) {
-    this.entityService = dependencies.entityService;
-    this.entityEmitter = dependencies.entityEmitter;
-    this.entitiesResource = new ResourceStore<Entity>([], x => x.id);
+    this.entitiesStore = dependencies.entitiesStore;
   }
 
-  mount(): any {
-    setTimeout(() => {
-      this.fetchEntities();
-    }, 100);
+  get entities(): any[] {
+    return this.entitiesStore.entities;
   }
 
-  @observable entitiesLoading: boolean = true;
-
-  @computed get entities(): any {
-    return this.entitiesResource.items;
+  get entitiesLoading(): boolean {
+    return this.entitiesStore.entitiesLoading;
   }
 
-  @computed get selectedEntity() {
-    return this.entitiesResource.selectedItem;
+  get selectedEntityId(): any {
+    return this.entitiesStore.selectedEntityId;
   }
 
-  @computed get selectedEntityId(): any {
-    if (!this.entitiesResource.selectedItem) {
-      return;
-    }
-    return this.entitiesResource.selectedItem.id;
-  }
-
-  @action fetchEntities = async (): Promise<void> => {
-    this.entitiesLoading = true;
-    try {
-      const entities = (await this.entityService.fetchEntities())['entities'];
-      this.entitiesResource.replace(entities);
-      this.entitiesResource.setSelectedId(entities[0].id);
-      this.entityEmitter.emitOnChooseEntity(this.selectedEntity);
-    } catch (error) {
-      console.warn(error);
-    }
-    this.entitiesLoading = false;
-  };
-
-  @action selectEntityId = (entityId: string | number): void => {
-    this.entitiesResource.setSelectedId(entityId);
-    this.entityEmitter.emitOnChooseEntity(this.selectedEntity);
+  selectedEntity = (entity: any) => {
+    entityEmitter.emitOnChooseEntity(entity);
+    this.entitiesStore.selectEntityId(entity.id);
   };
 }

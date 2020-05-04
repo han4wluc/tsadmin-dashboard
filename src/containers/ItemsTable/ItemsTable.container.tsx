@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Button, Modal, Card, Divider } from 'antd';
+import { Button, Modal, Card } from 'antd';
 import FlexView from 'react-flexview';
 
 import Action from './components/Action';

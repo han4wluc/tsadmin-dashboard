@@ -86,6 +86,7 @@ export class ItemsTableStore implements IItemsTableStore {
   mount(): any {
     const listerner = this.entityEmitter.addOnChooseEntityListerner(entity => {
       this.selectedEntity = entity;
+      this.itemsResource.replace([]);
       this.fetchData();
     });
     return listerner.remove;
