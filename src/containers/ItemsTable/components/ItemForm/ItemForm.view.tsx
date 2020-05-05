@@ -219,7 +219,9 @@ function ItemFormik(props: any): any {
   const { item = {}, onSubmit, mode, columns = [], loading, okText } = props;
 
   const initialValues = useMemo(() => {
-    return item;
+    return {
+      ...item,
+    };
   }, [item]);
 
   useEffect(() => {
@@ -265,7 +267,8 @@ function ItemFormik(props: any): any {
       }
     }
     if (type === 'model') {
-      if (initialValues[id]) {
+      // TODO refactor to not mutate initialValues
+      if (initialValues[id] && initialValues[id].id) {
         initialValues[id] = initialValues[id].id;
       }
     }
