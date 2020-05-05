@@ -38,7 +38,7 @@ function ItemsTable(props: { store: ItemsTableStore }): any {
             <SortEditor
               value={s.sortCondition}
               onChangeValue={s.setSortCondition}
-              columns={s.columns.map(c => c.id)}
+              columns={s.columns.map((c: any) => c.id)}
               dependencies={{
                 localValue: [],
               }}
@@ -46,7 +46,7 @@ function ItemsTable(props: { store: ItemsTableStore }): any {
             <FilterEditor
               value={s.filterCondition}
               onChangeValue={s.setFilterCondition}
-              columns={s.columns.map(c => c.id)}
+              columns={s.columns.map((c: any) => c.id)}
               dependencies={{
                 localValue: [],
               }}
