@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import moment from 'moment';
 import tsAdminClient from '~/services/api/clients/tsAdminClient';
 import { uniqBy } from 'lodash';
@@ -217,27 +217,36 @@ function ItemFormik(props: any): any {
   const [data, setData] = useState({});
 
   const { item = {}, onSubmit, mode, columns = [], loading, okText } = props;
-  const initialValues = {
-    ...item,
-  };
+
+  const initialValues = useMemo(() => {
+    return item;
+  }, [item]);
 
   useEffect(() => {
-    async function fetchItems(id: string) {
+    async function fetchItems(id: string, nameAttribute: string) {
+      if (initialValues[id] === undefined) {
+        return;
+      }
+      if (typeof initialValues[id] === 'object') {
+        return;
+      }
       const { data: newItem } = await tsAdminClient.get(
         `${id}/${initialValues[id]}`,
       );
-      setData({
-        ...data,
-        [id]: [newItem],
+      setData((d: any) => {
+        return {
+          ...d,
+          [id]: [newItem],
+        };
       });
     }
 
     columns.forEach((column: any) => {
       if (column.type === 'model') {
-        fetchItems(column.options.id);
+        fetchItems(column.options.id, column.options.nameAttribute);
       }
     });
-  }, [columns, data, initialValues]);
+  }, [columns, initialValues]);
   const filterColumns = createFilterColumnsFunction(mode);
 
   columns.filter(filterColumns).forEach((column: any) => {

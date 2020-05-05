@@ -171,39 +171,51 @@ export class ItemsTableStore {
     if (!this.selectedEntity) {
       return;
     }
-    this.createItemLoading = true;
-    await this.entityService.createItem(this.selectedEntity.label, data);
-    this.createItemLoading = false;
-    this.hideModal();
-    message.success('Create successful');
-    this.fetchData();
+    try {
+      this.createItemLoading = true;
+      await this.entityService.createItem(this.selectedEntity.label, data);
+      this.createItemLoading = false;
+      this.hideModal();
+      message.success('Create successful');
+      this.fetchData();
+    } catch (error) {
+      message.error('Create failed');
+    }
   };
 
   @action updateItem = async (data: any): Promise<void> => {
     if (!this.selectedEntity) {
       return;
     }
-    this.createItemLoading = true;
-    const item = await this.entityService.updateItem(
-      this.selectedEntity.label,
-      this.currentEditItemId,
-      data,
-    );
-    this.itemsResource.append(item);
-    message.success('Update successful');
-    this.createItemLoading = false;
-    this.hideModal();
-    this.fetchData();
-    return item;
+    try {
+      this.createItemLoading = true;
+      const item = await this.entityService.updateItem(
+        this.selectedEntity.label,
+        this.currentEditItemId,
+        data,
+      );
+      this.itemsResource.append(item);
+      message.success('Update successful');
+      this.createItemLoading = false;
+      this.hideModal();
+      this.fetchData();
+      return item;
+    } catch (error) {
+      message.error('Update failed');
+    }
   };
 
   @action deleteItem = async (id: any): Promise<void> => {
     if (!this.selectedEntity) {
       return;
     }
-    await this.entityService.deleteItem(this.selectedEntity.label, id);
-    message.success('Item deleted');
-    this.fetchData();
+    try {
+      await this.entityService.deleteItem(this.selectedEntity.label, id);
+      message.success('Item deleted');
+      this.fetchData();
+    } catch (error) {
+      message.error('Delete failed');
+    }
   };
 
   showCreateModal = (): void => {
