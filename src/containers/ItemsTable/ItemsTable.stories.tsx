@@ -73,7 +73,7 @@ const columns = [
 export const normal = () => {
   return (
     <div style={{ padding: 32 }}>
-      <ItemsTable
+      {/* <ItemsTable
         store={{
           showUpdateModal: action('showUpdateModal'),
           deleteItem: () => {
@@ -104,7 +104,7 @@ export const normal = () => {
           createItemLoading: false,
           onSubmitForm: action('onSubmitForm'),
         }}
-      />
+      /> */}
     </div>
   );
 };

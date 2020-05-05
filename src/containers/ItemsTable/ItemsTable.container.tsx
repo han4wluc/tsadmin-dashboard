@@ -3,13 +3,13 @@ import { Button, Modal, Card } from 'antd';
 import FlexView from 'react-flexview';
 
 import Action from './components/Action';
-import { IItemsTableStore } from './ItemsTable.store';
+import { ItemsTableStore } from './ItemsTable.store';
 import DataTable from './components/DataTable';
 import ItemForm from './components/ItemForm';
 import FilterEditor from './components/FilterEditor';
 import SortEditor from './components/SortEditor';
 
-function ItemsTable(props: { store: IItemsTableStore }): any {
+function ItemsTable(props: { store: ItemsTableStore }): any {
   const { store: s } = props;
 
   const renderAction = useCallback(

@@ -45,30 +45,7 @@ const filterConditionToString = (filterCondition: any) => {
   return `and(${str})`;
 };
 
-export interface IItemsTableStore {
-  showUpdateModal: (itemId: string | number) => void;
-  deleteItem: (id: any) => Promise<void>;
-  sortCondition?: any[];
-  setSortCondition: (sortCondition: any) => void;
-  filterCondition?: any[];
-  setFilterCondition: (filterCondition: any) => void;
-  doSearch: () => void;
-  showCreateModal: () => void;
-  items: any[];
-  itemsLoading: boolean;
-  columns: any[];
-  pageInfo: Page;
-  fetchData: (pageNum: number) => Promise<void>;
-  modalTitle: string;
-  hideModal: () => void;
-  modalVisible: boolean;
-  modalMode: string;
-  currentEditItem: any;
-  createItemLoading: boolean;
-  onSubmitForm: (data: any) => void;
-}
-
-export class ItemsTableStore implements IItemsTableStore {
+export class ItemsTableStore {
   private entityService: EntityService;
   private itemsResource: ResourceStore<object>;
   private modalStore: ModalStore<any>;
