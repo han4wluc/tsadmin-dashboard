@@ -193,6 +193,7 @@ export class ItemsTableStore {
     message.success('Update successful');
     this.createItemLoading = false;
     this.hideModal();
+    this.fetchData();
     return item;
   };
 
